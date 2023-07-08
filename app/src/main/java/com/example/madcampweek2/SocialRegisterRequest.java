@@ -9,22 +9,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class RegisterRequest extends StringRequest {
+public class SocialRegisterRequest extends StringRequest {
 
     //서버 URL 설정
-    final static private String URL = "https://0e6c-192-249-19-234.ngrok-free.app/register";
+    final static private String URL = "https://0e6c-192-249-19-234.ngrok-free.app/sregister";
     private Map<String, String> map;
     //private Map<String, String>parameters;
 
-    public RegisterRequest(String UserId, String UserPwd, String UserName,Response.Listener<String> listener) {
+    public SocialRegisterRequest(String UserName, String photo,Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
 
         String UID = UUID.randomUUID().toString();
         map = new HashMap<>();
         map.put("uid", UID);
-        map.put("id", UserId);
-        map.put("pw", UserPwd);
         map.put("name", UserName);
+        map.put("photo", photo);
     }
 
     @Override
