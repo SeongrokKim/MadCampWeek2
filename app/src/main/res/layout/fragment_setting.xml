@@ -14,28 +14,6 @@
         android:layout_height="match_parent">
 
 
-        <Button
-            android:id="@+id/pw_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="56dp"
-            android:text="비밀번호 변경"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/profile_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="57dp"
-            android:text="프로필 사진 변경"
-            app:layout_constraintBottom_toTopOf="@+id/nickname_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.0" />
-
         <ImageView
             android:id="@+id/profileView"
             android:layout_width="110dp"
@@ -160,17 +138,6 @@
                     app:layout_constraintVertical_bias="0.2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/nickname_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
-            android:text="닉네임 변경"
-            app:layout_constraintBottom_toTopOf="@+id/pw_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
