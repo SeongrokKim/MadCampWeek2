@@ -2,14 +2,17 @@ package com.example.madcampweek2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+
+
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private View loginKakao;
     private View loginGoogle;
     private static final int RC_SIGN_IN = 123;
+    private EditText login_id, login_password;
+    private Button login_button, join_button;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -62,11 +67,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+      
+        login_id = findViewById( R.id.login_id);
+        login_password = findViewById( R.id.login_password );
         loginButton = findViewById(R.id.login_button);
         id = findViewById(R.id.login_id);
         password = findViewById(R.id.login_password);
@@ -93,7 +101,46 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "로그인 하는 중", Toast.LENGTH_SHORT).show();
+                String UserId = login_id.getText().toString();
+                String UserPwd = login_password.getText().toString();
+
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject( response );
+                            boolean success = jsonObject.getBoolean( "success" );
+                            System.out.println(success);
+
+                            if(success) {//로그인 성공시
+
+                                String ID = jsonObject.getString( "id" );
+                                String PW = jsonObject.getString( "pw" );
+                                String name = jsonObject.getString( "name" );
+
+                                Toast.makeText( getApplicationContext(), String.format("%s님 환영합니다.", name), Toast.LENGTH_SHORT ).show();
+//                                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
+//
+//                                intent.putExtra( "UserId", UserId );
+//                                intent.putExtra( "UserPwd", UserPwd );
+//                                intent.putExtra( "UserName", UserName );
+//
+//                                startActivity( intent );
+
+                            } else {//로그인 실패시
+                                Toast.makeText( getApplicationContext(), "로그인에 실패하셨습니다.", Toast.LENGTH_SHORT ).show();
+                                return;
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                LoginRequest loginRequest = new LoginRequest( UserId, UserPwd, responseListener );
+                RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
+                queue.add( loginRequest );
             }
         });
 
@@ -149,6 +196,7 @@ public class LoginActivity extends AppCompatActivity {
                     // 로그인이 되어 있지 않다면 위와 반대로
                 }
                 return null;
+
             }
         });
     }

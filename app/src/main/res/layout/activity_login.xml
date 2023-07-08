@@ -54,6 +54,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintTop_toBottomOf="@+id/join_button" />
 
+
     <ImageView
         android:id="@+id/login_google"
         android:layout_width="360dp"
@@ -61,5 +62,6 @@
         android:src="@drawable/google_login"
         app:layout_constraintTop_toBottomOf="@+id/login_kakao"
         tools:layout_editor_absoluteX="0dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
