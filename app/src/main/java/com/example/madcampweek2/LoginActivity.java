@@ -3,12 +3,14 @@ package com.example.madcampweek2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 
 import android.content.Intent;
 import android.net.Uri;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
@@ -42,6 +51,9 @@ public class LoginActivity extends AppCompatActivity {
     private View loginGoogle;
     private static final int RC_SIGN_IN = 123;
     private EditText login_id, login_password;
+    public String accessToken;
+    public String refreshToken;
+    private String kakaoID;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -55,12 +67,14 @@ public class LoginActivity extends AppCompatActivity {
                 // 사용자 이름과 이미지를 가져옵니다.
                 String name = account.getDisplayName();
                 Uri photoUri = account.getPhotoUrl();
+                String email = account.getEmail();
 
                 // MainActivity로 이동하기 위한 Intent를 생성합니다.
                 Intent intent = new Intent(this, MainActivity.class);
                 // 사용자 이름과 이미지를 Intent에 추가합니다.
                 intent.putExtra("name", name);
                 intent.putExtra("photoUri", String.valueOf(photoUri));
+                intent.putExtra("email", email);
 
                 // MainActivity로 이동합니다.
                 startActivity(intent);
@@ -93,6 +107,20 @@ public class LoginActivity extends AppCompatActivity {
                 //oAuthToken != null 이라면 로그인 성공
                 if(oAuthToken!=null){
                     // 토큰이 전달된다면 로그인이 성공한 것이고 토큰이 전달되지 않으면 로그인 실패한다.
+                    accessToken = oAuthToken.getAccessToken();
+                    refreshToken = oAuthToken.getRefreshToken();
+
+                    UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
+                        @Override
+                        public Unit invoke(User user, Throwable throwable) {
+                            if (user != null) {
+                                // 사용자 id 출력
+                                long userId = user.getId();
+                                kakaoID = String.valueOf(userId);
+                            }
+                            return null;
+                        }
+                    });
                     updateKakaoLoginUi();
 
                 }else {
@@ -173,7 +201,6 @@ public class LoginActivity extends AppCompatActivity {
                         .build();
 
                 GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(LoginActivity.this, gso);
-
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -192,6 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
                     intent.putExtra("photoUri", Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl()));
+                    intent.putExtra("kakaoID", kakaoID);
                     startActivity(intent);
                 }else {
                     // 로그인이 되어 있지 않다면 위와 반대로
