@@ -70,6 +70,22 @@ public class LoginActivity extends AppCompatActivity {
                 Uri photoUri = account.getPhotoUrl();
                 String email = account.getEmail();
 
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject( response );
+                            String uid = jsonObject.getString( "uid" );
+                            System.out.println(uid);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                SocialRegisterRequest socialRegisterRequest = new SocialRegisterRequest( email, name, String.valueOf(photoUri), responseListener );
+                RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
+                queue.add( socialRegisterRequest );
+
                 // MainActivity로 이동하기 위한 Intent를 생성합니다.
                 Intent intent = new Intent(this, MainActivity.class);
                 // 사용자 이름과 이미지를 Intent에 추가합니다.
