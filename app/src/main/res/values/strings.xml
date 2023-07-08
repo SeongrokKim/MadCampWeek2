@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MadCampWeek2</string>
+    <string name="server_client_id">madcampweek2</string>
 </resources>
