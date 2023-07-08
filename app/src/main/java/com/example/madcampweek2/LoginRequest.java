@@ -11,7 +11,7 @@ import java.util.Map;
 public class LoginRequest extends StringRequest {
 
     //서버 URL 설정
-    final static private String URL = "http://192.168.0.43:3000/login";
+    final static private String URL = "https://0e6c-192-249-19-234.ngrok-free.app/login";
     private Map<String, String> map;
 
     public LoginRequest(String ID, String UserPwd, Response.Listener<String> listener) {
