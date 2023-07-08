@@ -16,10 +16,9 @@ public class SocialRegisterRequest extends StringRequest {
     private Map<String, String> map;
     //private Map<String, String>parameters;
 
-    public SocialRegisterRequest(String UserName, String photo,Response.Listener<String> listener) {
+    public SocialRegisterRequest(String UID, String UserName, String photo,Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
 
-        String UID = UUID.randomUUID().toString();
         map = new HashMap<>();
         map.put("uid", UID);
         map.put("name", UserName);

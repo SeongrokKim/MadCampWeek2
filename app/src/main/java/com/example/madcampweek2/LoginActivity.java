@@ -70,6 +70,23 @@ public class LoginActivity extends AppCompatActivity {
                 String name = account.getDisplayName();
                 Uri photoUri = account.getPhotoUrl();
                 String email = account.getEmail();
+                Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject( response );
+                            String uid = jsonObject.getString( "uid" );
+                            System.out.println(uid);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                SocialRegisterRequest socialRegisterRequest = new SocialRegisterRequest( email, name, String.valueOf(photoUri), responseListener );
+                RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
+                queue.add( socialRegisterRequest );
 
                 // MainActivity로 이동하기 위한 Intent를 생성합니다.
                 Intent intent = new Intent(this, MainActivity.class);
@@ -119,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // 사용자 id 출력
                                 long userId = user.getId();
                                 kakaoID = String.valueOf(userId);
+                                Toast.makeText(getApplicationContext(),kakaoID,Toast.LENGTH_SHORT).show();
                             }
                             return null;
                         }
@@ -218,6 +236,22 @@ public class LoginActivity extends AppCompatActivity {
             public Unit invoke(User user, Throwable throwable) {
                 // 로그인이 되어있으면
                 if (user!=null){
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject( response );
+                                String uid = jsonObject.getString( "uid" );
+                                System.out.println(uid);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    SocialRegisterRequest socialRegisterRequest = new SocialRegisterRequest( kakaoID, user.getKakaoAccount().getProfile().getNickname(), String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())), responseListener );
+                    RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
+                    queue.add( socialRegisterRequest );
+
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
                     intent.putExtra("photoUri", Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl()));
