@@ -1,31 +1,15 @@
 package com.example.madcampweek2;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.IntentSenderRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.identity.GetSignInIntentRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -36,8 +20,6 @@ import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -49,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button joinButton;
     private View loginKakao;
     private View loginGoogle;
-    private View loginNaver;
     private static final int RC_SIGN_IN = 123;
 
     @Override
@@ -92,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
         joinButton = findViewById(R.id.join_button);
         loginKakao = findViewById(R.id.login_kakao);
         loginGoogle = findViewById(R.id.login_google);
-        loginNaver = findViewById(R.id.login_naver);
 
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
             @Override
@@ -151,15 +131,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
-
-        loginNaver.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-
-            }
-
-        });
-
 
 
     }

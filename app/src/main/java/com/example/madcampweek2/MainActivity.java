@@ -92,22 +92,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
-//        @Override
-//        public Unit invoke(Throwable throwable) {
-//            UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
-//                @Override
-//                public Unit invoke(User user, Throwable throwable) {
-//                    profile.setImageBitmap(null);
-//                    nickname.setText(null);
-//                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//                    startActivity(intent);
-//                    return null;
-//                }
-//            });
-//            return null;
-//        }
-//    });
-
 
 }
