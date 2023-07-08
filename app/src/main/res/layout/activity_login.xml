@@ -62,11 +62,5 @@
         app:layout_constraintTop_toBottomOf="@+id/login_kakao"
         tools:layout_editor_absoluteX="0dp" />
 
-    <ImageView
-        android:id="@+id/login_naver"
-        android:layout_width="360dp"
-        android:layout_height="50dp"
-        android:src="@drawable/naver_login"
-        app:layout_constraintTop_toBottomOf="@+id/login_google" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

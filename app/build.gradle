@@ -6,6 +6,14 @@ android {
     namespace 'com.example.madcampweek2'
     compileSdk 33
 
+    dataBinding {
+        enabled = true
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.example.madcampweek2"
         minSdk 24
