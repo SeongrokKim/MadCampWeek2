@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Google 로그인에 성공한 경우
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d("kfnjkasnfkajnfnsdkfnsdnfjnskdfnajsnfjnaksdf",account.getDisplayName());
                 // 사용자 이름과 이미지를 가져옵니다.
                 String name = account.getDisplayName();
                 Uri photoUri = account.getPhotoUrl();
