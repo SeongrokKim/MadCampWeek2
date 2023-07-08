@@ -23,6 +23,12 @@ import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -36,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
     private View loginGoogle;
     private static final int RC_SIGN_IN = 123;
     private EditText login_id, login_password;
-    private Button login_button, join_button;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -115,18 +120,14 @@ public class LoginActivity extends AppCompatActivity {
 
                             if(success) {//로그인 성공시
 
-                                String ID = jsonObject.getString( "id" );
-                                String PW = jsonObject.getString( "pw" );
                                 String name = jsonObject.getString( "name" );
 
                                 Toast.makeText( getApplicationContext(), String.format("%s님 환영합니다.", name), Toast.LENGTH_SHORT ).show();
-//                                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
-//
-//                                intent.putExtra( "UserId", UserId );
-//                                intent.putExtra( "UserPwd", UserPwd );
-//                                intent.putExtra( "UserName", UserName );
-//
-//                                startActivity( intent );
+                                Intent intent = new Intent( getApplicationContext(), MainActivity.class );
+
+                                intent.putExtra( "name", name );
+
+                                startActivity( intent );
 
                             } else {//로그인 실패시
                                 Toast.makeText( getApplicationContext(), "로그인에 실패하셨습니다.", Toast.LENGTH_SHORT ).show();
