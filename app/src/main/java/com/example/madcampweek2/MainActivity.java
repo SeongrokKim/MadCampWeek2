@@ -21,8 +21,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.widget.Toast;
 
-import com.example.madcampweek2.databinding.ActivityMainBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
                 } else if (item.getItemId() == R.id.tab3) {
                     titleText.setText("설정");
-                    pager.setCurrentItem(1);
+                    pager.setCurrentItem(2);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commit();
                 }
                 return true;
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
-        Uri photoUri = intent.getParcelableExtra("photoUri");
+        String photoUri = intent.getStringExtra("photoUri");
         //Toast.makeText(getApplicationContext(),intent.getStringExtra("photoUri"),Toast.LENGTH_SHORT).show();
         if (photoUri != null) {
             Glide.with(profile).load(photoUri).circleCrop().into(profile);

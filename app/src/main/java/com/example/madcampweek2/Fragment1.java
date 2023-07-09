@@ -1,5 +1,6 @@
 package com.example.madcampweek2;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,16 +13,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.health.SystemHealthManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.madcampweek2.databinding.FragmentFragment1Binding;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 
@@ -41,11 +45,13 @@ public class Fragment1 extends Fragment {
     }
 
     private RecyclerView recyclerView;
+    private ImageView add_btn;
     private MyAdapter adapter;
     private List<String> titleList;
     private List<String> nameList;
     private List<String> datetimeList;
     private List<String> textList;
+    private FragmentFragment1Binding binding;
 
     public Fragment1() {
         // Required empty public constructor
@@ -57,6 +63,7 @@ public class Fragment1 extends Fragment {
 
         // RecyclerView 초기화
         recyclerView = rootView.findViewById(R.id.recyclerView);
+        add_btn = rootView.findViewById(R.id.add_btn);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // 데이터 리스트 초기화
@@ -71,6 +78,23 @@ public class Fragment1 extends Fragment {
         if(bundle != null){
             uid[0] = bundle.getString("UID");
         }
+
+        add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("uid", uid[0]);
+                Fragment1_add fragment1_add = new Fragment1_add();
+                fragment1_add.setArguments(bundle1);
+
+                FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, fragment1_add);
+                fragmentTransaction.addToBackStack(null);
+                recyclerView.setVisibility(View.INVISIBLE);
+                fragmentTransaction.commit();
+
+            }
+        });
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -152,13 +176,6 @@ public class Fragment1 extends Fragment {
             return title.size();
         }
 
-        public void removeAllItems() {
-            title.clear();
-            name.clear();
-            datetime.clear();
-            text.clear();
-            notifyDataSetChanged();
-        }
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             private TextView titleTextView;
@@ -185,8 +202,6 @@ public class Fragment1 extends Fragment {
                 String itemDatetime = datetime.get(position);
                 String itemText = text.get(position);
 
-                System.out.println(itemText);
-
                 Fragment1_detail fragment = new Fragment1_detail();
                 Bundle bundle = new Bundle();
                 bundle.putString("title", itemTitle);
@@ -198,8 +213,7 @@ public class Fragment1 extends Fragment {
                 FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(null);
-//                adapter.removeAllItems();
-//                adapter.notifyDataSetChanged();
+                recyclerView.setVisibility(View.INVISIBLE);
                 fragmentTransaction.commit();
 
 

@@ -84,7 +84,20 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject( response );
                             uid[0] = jsonObject.getString( "uid" );
-                            System.out.println(uid[0]);
+
+                            // MainActivity로 이동하기 위한 Intent를 생성합니다.
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            // 사용자 이름과 이미지를 Intent에 추가합니다.
+                            intent.putExtra("name", name);
+                            intent.putExtra("photoUri", String.valueOf(photoUri));
+                            intent.putExtra("email", email);
+                            intent.putExtra("UID", uid[0]);
+                            if(uid[0] != null){
+                                // MainActivity로 이동합니다.
+                                startActivity(intent);
+                            }
+                            else System.out.println("error, null UID");
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -94,18 +107,6 @@ public class LoginActivity extends AppCompatActivity {
                 RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
                 queue.add( socialRegisterRequest );
 
-                // MainActivity로 이동하기 위한 Intent를 생성합니다.
-                Intent intent = new Intent(this, MainActivity.class);
-                // 사용자 이름과 이미지를 Intent에 추가합니다.
-                intent.putExtra("name", name);
-                intent.putExtra("photoUri", String.valueOf(photoUri));
-                intent.putExtra("email", email);
-                intent.putExtra("UID", uid[0]);
-                if(uid[0] != null){
-                    // MainActivity로 이동합니다.
-                    startActivity(intent);
-                }
-                else System.out.println("error, null UID");
 
             } catch (ApiException e) {
                 // Google 로그인에 실패한 경우
@@ -123,21 +124,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md;
-                md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String something = new String(Base64.encode(md.digest(), 0));
-                Log.e("Hash key", something);
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            Log.e("name not found", e.toString());
-        }
 
         login_id = findViewById( R.id.login_id);
         login_password = findViewById( R.id.login_password );
@@ -277,7 +263,16 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject( response );
                                 uid[0] = jsonObject.getString( "uid" );
-                                System.out.println(uid[0]);
+//                                System.out.println(uid[0]);
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
+                                intent.putExtra("photoUri", String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())));
+//                                intent.putExtra("kakaoID", kakaoID);
+                                intent.putExtra("UID", uid[0]);
+
+                                if(uid[0]!=null) startActivity(intent);
+                                else System.out.println("ERROR: null UID");
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -287,14 +282,7 @@ public class LoginActivity extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
                     queue.add( socialRegisterRequest );
 
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
-                    intent.putExtra("photoUri", Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl()));
-                    intent.putExtra("kakaoID", kakaoID);
-                    intent.putExtra("UID", uid[0]);
 
-                    if(uid[0]!=null) startActivity(intent);
-                    else System.out.println("ERROR: null UID");
 
                 }else {
                     // 로그인이 되어 있지 않다면 위와 반대로
