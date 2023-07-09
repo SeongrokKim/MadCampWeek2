@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -29,6 +30,10 @@ public class Fragment2 extends Fragment{
     private ImageButton btnPrev;
     private ImageButton btnNext;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerViewLog;
+    private String title;
+    private int count;
+    private String time;
 
     public Fragment2() {
         // Required empty public constructor
@@ -47,6 +52,8 @@ public class Fragment2 extends Fragment{
         CalendarUtil.selectedDate = LocalDate.now();
         CalendarUtil.today = LocalDate.now();
         recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerViewLog = root.findViewById(R.id.recyclerViewLog);
+        setLogView();
         setMonthView();
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +87,16 @@ public class Fragment2 extends Fragment{
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void setLogView(){
+        title = "기타";
+        count = 3;
+        time = "10:20:30";
+        LogAdapter logAdapter = new LogAdapter(title,count,time);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+        recyclerViewLog.setLayoutManager(manager);
+        recyclerViewLog.setAdapter(logAdapter);
     }
 
     private ArrayList<LocalDate> daysInMonthArray(LocalDate date){

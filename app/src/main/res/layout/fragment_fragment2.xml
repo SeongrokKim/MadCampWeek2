@@ -8,8 +8,8 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/custom_calendar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -28,10 +28,11 @@
             <TextView
                 android:id="@+id/myText"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:textAlignment="center"
-                android:textSize="25sp" />
+                android:layout_marginTop="7dp"
+                android:textSize="20sp" />
             <ImageButton
                 android:id="@+id/btn_next"
                 android:layout_width="0dp"
@@ -46,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="-20dp"
             android:background="#eaeae9" >
 
             <TextView
@@ -53,8 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="일"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 android:textAlignment="center"
                 android:textColor="@android:color/holo_red_dark" />
 
@@ -63,8 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="월"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 android:textAlignment="center"
                 android:textColor="@android:color/black" />
 
@@ -73,8 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="화"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 android:textAlignment="center"
                 android:textColor="@android:color/black" />
 
@@ -83,8 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="수"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 android:textAlignment="center"
                 android:textColor="@android:color/black" />
 
@@ -93,8 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="목"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 android:textAlignment="center"
                 android:textColor="@android:color/black" />
 
@@ -103,8 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="금"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 android:textAlignment="center"
                 android:textColor="@android:color/black" />
 
@@ -114,8 +110,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="토"
-                android:textSize="18sp"
-                android:textColor="@android:color/holo_blue_dark"/>
+                android:textSize="13sp"
+                android:textColor="#0000FF"/>
 
         </LinearLayout>
 
@@ -123,9 +119,15 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewLog"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="410dp"/>
 
 
 </FrameLayout>
