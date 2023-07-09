@@ -21,8 +21,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.widget.Toast;
 
-import com.example.madcampweek2.databinding.ActivityMainBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -72,17 +72,21 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(pagerAdapter);
         pager.setOffscreenPageLimit(3);
 
-
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.tab2);
         titleText.setText("홈");
         pager.setCurrentItem(1);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            Intent intent = getIntent();
+            String UID = intent.getStringExtra("UID");
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.tab1){
                     titleText.setText("게시판");
                     pager.setCurrentItem(0);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("UID", UID);
+                    fragment1.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
                 } else if (item.getItemId() == R.id.tab2) {
                     titleText.setText("홈");
@@ -133,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
-        Uri photoUri = intent.getParcelableExtra("photoUri");
+        String photoUri = intent.getStringExtra("photoUri");
         //Toast.makeText(getApplicationContext(),intent.getStringExtra("photoUri"),Toast.LENGTH_SHORT).show();
         if (photoUri != null) {
             Glide.with(profile).load(photoUri).circleCrop().into(profile);

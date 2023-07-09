@@ -3,6 +3,9 @@ package com.example.madcampweek2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -10,6 +13,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +43,8 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+import java.security.MessageDigest;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -71,14 +77,27 @@ public class LoginActivity extends AppCompatActivity {
                 Uri photoUri = account.getPhotoUrl();
                 String email = account.getEmail();
                 Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
-
+                final String[] uid = {null};
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject = new JSONObject( response );
-                            String uid = jsonObject.getString( "uid" );
-                            System.out.println(uid);
+                            uid[0] = jsonObject.getString( "uid" );
+
+                            // MainActivity로 이동하기 위한 Intent를 생성합니다.
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            // 사용자 이름과 이미지를 Intent에 추가합니다.
+                            intent.putExtra("name", name);
+                            intent.putExtra("photoUri", String.valueOf(photoUri));
+                            intent.putExtra("email", email);
+                            intent.putExtra("UID", uid[0]);
+                            if(uid[0] != null){
+                                // MainActivity로 이동합니다.
+                                startActivity(intent);
+                            }
+                            else System.out.println("error, null UID");
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -88,29 +107,24 @@ public class LoginActivity extends AppCompatActivity {
                 RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
                 queue.add( socialRegisterRequest );
 
-                // MainActivity로 이동하기 위한 Intent를 생성합니다.
-                Intent intent = new Intent(this, MainActivity.class);
-                // 사용자 이름과 이미지를 Intent에 추가합니다.
-                intent.putExtra("name", name);
-                intent.putExtra("photoUri", String.valueOf(photoUri));
-                intent.putExtra("email", email);
 
-                // MainActivity로 이동합니다.
-                startActivity(intent);
             } catch (ApiException e) {
                 // Google 로그인에 실패한 경우
+
                 Toast.makeText(getApplicationContext(),"Google Sign-in failed", Toast.LENGTH_SHORT).show();
                 // 실패 처리를 수행합니다.
             }
         }
     }
 
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-      
+
         login_id = findViewById( R.id.login_id);
         login_password = findViewById( R.id.login_password );
         loginButton = findViewById(R.id.login_button);
@@ -145,6 +159,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 }else {
                     //로그인 실패
+                    if (throwable != null) {
+                        String errorMessage = throwable.getMessage(); // 오류 메시지를 가져옵니다.
+                        System.out.println("오류 메시지: " + errorMessage);
+                    }
                     Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                 }
                 return null;
@@ -169,11 +187,13 @@ public class LoginActivity extends AppCompatActivity {
                             if(success) {//로그인 성공시
 
                                 String name = jsonObject.getString( "name" );
+                                String UID = jsonObject.getString("uid");
 
                                 Toast.makeText( getApplicationContext(), String.format("%s님 환영합니다.", name), Toast.LENGTH_SHORT ).show();
                                 Intent intent = new Intent( getApplicationContext(), MainActivity.class );
 
                                 intent.putExtra( "name", name );
+                                intent.putExtra("UID", UID);
 
                                 startActivity( intent );
 
@@ -236,13 +256,23 @@ public class LoginActivity extends AppCompatActivity {
             public Unit invoke(User user, Throwable throwable) {
                 // 로그인이 되어있으면
                 if (user!=null){
+                    final String[] uid = {null};
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
                                 JSONObject jsonObject = new JSONObject( response );
-                                String uid = jsonObject.getString( "uid" );
-                                System.out.println(uid);
+                                uid[0] = jsonObject.getString( "uid" );
+//                                System.out.println(uid[0]);
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
+                                intent.putExtra("photoUri", String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())));
+//                                intent.putExtra("kakaoID", kakaoID);
+                                intent.putExtra("UID", uid[0]);
+
+                                if(uid[0]!=null) startActivity(intent);
+                                else System.out.println("ERROR: null UID");
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -252,11 +282,8 @@ public class LoginActivity extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
                     queue.add( socialRegisterRequest );
 
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
-                    intent.putExtra("photoUri", Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl()));
-                    intent.putExtra("kakaoID", kakaoID);
-                    startActivity(intent);
+
+
                 }else {
                     // 로그인이 되어 있지 않다면 위와 반대로
                 }
