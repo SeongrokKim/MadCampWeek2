@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.madcampweek2.databinding.FragmentFragment2Binding;
 
@@ -18,12 +20,12 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class Fragment2 extends Fragment {
+public class Fragment2 extends Fragment{
 
     private FragmentFragment2Binding binding;
     private TextView myText;
-    private LocalDate selectedDate;
     private ImageButton btnPrev;
     private ImageButton btnNext;
     private RecyclerView recyclerView;
@@ -42,14 +44,15 @@ public class Fragment2 extends Fragment {
         myText = root.findViewById(R.id.myText);
         btnPrev = root.findViewById(R.id.btn_prev);
         btnNext = root.findViewById(R.id.btn_next);
-        selectedDate = LocalDate.now();
+        CalendarUtil.selectedDate = LocalDate.now();
+        CalendarUtil.today = LocalDate.now();
         recyclerView = root.findViewById(R.id.recyclerView);
         setMonthView();
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedDate = selectedDate.minusMonths(1);
+                CalendarUtil.selectedDate = CalendarUtil.selectedDate.minusMonths(1);
                 setMonthView();
             }
         });
@@ -57,7 +60,7 @@ public class Fragment2 extends Fragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedDate = selectedDate.plusMonths(1);
+                CalendarUtil.selectedDate = CalendarUtil.selectedDate.plusMonths(1);
                 setMonthView();
             }
         });
@@ -65,31 +68,31 @@ public class Fragment2 extends Fragment {
         return root;
     }
 
-    private  String monthYearFromDate(LocalDate date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 yyyy");
+    private  String yearMonthFromDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월");
         return date.format(formatter);
     }
 
     private void setMonthView(){
-        myText.setText(monthYearFromDate(selectedDate));
-        ArrayList<String> dayList = daysInMonthArray(selectedDate);
+        myText.setText(yearMonthFromDate(CalendarUtil.selectedDate));
+        ArrayList<LocalDate> dayList = daysInMonthArray(CalendarUtil.selectedDate);
         CalendarAdapter adapter = new CalendarAdapter(dayList);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
     }
 
-    private ArrayList<String> daysInMonthArray(LocalDate date){
-        ArrayList<String> dayList = new ArrayList<>();
+    private ArrayList<LocalDate> daysInMonthArray(LocalDate date){
+        ArrayList<LocalDate> dayList = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(date);
         int lastDay = yearMonth.lengthOfMonth();
-        LocalDate firstDay = selectedDate.withDayOfMonth(1);
+        LocalDate firstDay = CalendarUtil.selectedDate.withDayOfMonth(1);
         int dayOfWeek = firstDay.getDayOfWeek().getValue();
         for (int i = 1; i<42; i++){
             if (i<=dayOfWeek || i>lastDay+dayOfWeek){
-                dayList.add("");
+                dayList.add(null);
             }else {
-                dayList.add(String.valueOf(i-dayOfWeek));
+                dayList.add(LocalDate.of(CalendarUtil.selectedDate.getYear(), CalendarUtil.selectedDate.getMonth(), i-dayOfWeek));
             }
         }
         return dayList;

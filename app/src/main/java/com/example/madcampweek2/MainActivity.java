@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
                 } else if (item.getItemId() == R.id.tab3) {
                     titleText.setText("설정");
-                    pager.setCurrentItem(1);
+                    pager.setCurrentItem(2);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commit();
                 }
                 return true;
