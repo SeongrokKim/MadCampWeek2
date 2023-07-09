@@ -70,18 +70,21 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(pagerAdapter);
         pager.setOffscreenPageLimit(3);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
-
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.tab2);
         titleText.setText("홈");
         pager.setCurrentItem(1);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            Intent intent = getIntent();
+            String UID = intent.getStringExtra("UID");
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.tab1){
                     titleText.setText("게시판");
                     pager.setCurrentItem(0);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("UID", UID);
+                    fragment1.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
                 } else if (item.getItemId() == R.id.tab2) {
                     titleText.setText("홈");
