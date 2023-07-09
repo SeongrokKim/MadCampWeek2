@@ -51,12 +51,14 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     private BottomNavigationView bottomNavigationView;
     private MenuItem prevMenuItem;
+    private ActivityMainBinding binding;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         fragment1 = new Fragment1();
         fragment2 = new Fragment2();
