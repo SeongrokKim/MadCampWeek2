@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Intent intent = getIntent();
-        String UID = intent.getStringExtra("UID");
-
         fragment1 = new Fragment1();
         fragment2 = new Fragment2(UID);
         fragment3 = new Fragment3();
