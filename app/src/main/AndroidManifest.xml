@@ -16,9 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MadCampWeek2"
         tools:targetApi="31">
-        <activity android:name=".KakaoActivity"
-            android:exported="true"/>
-      
+        <activity
+            android:name=".LogDetail"
+            android:exported="false" />
+        <activity
+            android:name=".KakaoActivity"
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -28,24 +31,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".RegisterActivity"
-            android:exported="true"/>
-
-        <activity android:name=".MainActivity"
-            android:exported="true"/>
-
-        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="oauth" android:scheme="kakao49aff5155e97e9793c5ab414de97a479" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao49aff5155e97e9793c5ab414de97a479" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>

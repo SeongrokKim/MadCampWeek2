@@ -100,7 +100,7 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#00FF00">
+        android:background="#FFFFFF">
 
         <!-- 프로필 이미지 -->
         <ImageView
@@ -121,6 +121,79 @@
             app:layout_constraintTop_toBottomOf="@id/profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/met"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/nickname"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:id="@+id/metronome"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/icon_metronome"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="메트로놈"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/met"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="15dp">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/icon_tuner"
+                android:layout_marginLeft="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:text="튜너"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tun"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/icon_book"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="연습 기록"/>
+
+        </LinearLayout>
 
         <!-- 로그아웃 버튼 -->
         <Button
