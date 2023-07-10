@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.madcampweek2.databinding.FragmentFragment2Binding;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -32,12 +40,16 @@ public class Fragment2 extends Fragment{
     private RecyclerView recyclerView;
     private RecyclerView recyclerViewLog;
     private String title;
-    private int count;
+    private String count;
     private String time;
+    private ArrayList<String> dateList, titleList, timeList, countList, journalList, categoryList;
+    private String uid;
 
-    public Fragment2() {
+    public Fragment2(String uid) {
+        this.uid=uid;
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -51,15 +63,94 @@ public class Fragment2 extends Fragment{
         btnNext = root.findViewById(R.id.btn_next);
         CalendarUtil.selectedDate = LocalDate.now();
         CalendarUtil.today = LocalDate.now();
+        String dateOfYear = String.valueOf(CalendarUtil.selectedDate.getYear());
+        String dateOfMonth = String.valueOf(CalendarUtil.selectedDate.getMonthValue());
+
+        Log.d("UID",uid);
+
+        dateList = new ArrayList<String>();
+        timeList = new ArrayList<String>();
+        countList = new ArrayList<String>();
+        journalList = new ArrayList<String>();
+        titleList = new ArrayList<String>();
+        categoryList = new ArrayList<String>();
+        Log.d("1111111111111111111","1111111111111111111111111");
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject( response );
+                    JSONArray result = jsonObject.getJSONArray("result");
+                    Log.d("result",String.valueOf(result.length()));
+
+                    for (int i = 0; i < result.length(); i++) {
+                        JSONObject dataObject = result.getJSONObject(i);
+
+                        String date = dataObject.getString("date"); // "name"은 배열의 각 객체에서 정의한 키
+                        String time = dataObject.getString("time");
+                        String count = dataObject.getString("count");
+                        String journal = dataObject.getString("journal");
+                        String title = dataObject.getString("title");
+                        String category = dataObject.getString("category");
+
+                        if (date == null){
+                            dateList.add("");
+                        }else{
+                            dateList.add(date);
+                        }
+                        if (time == null){
+                            timeList.add("");
+                        }else{
+                            timeList.add(time);
+                        }
+                        if (count == null){
+                            countList.add("");
+                        }else{
+                            countList.add(count);
+                        }
+                        if (journal == null){
+                            journalList.add("");
+                        }else{
+                            journalList.add(journal);
+                        }
+                        if (title == null){
+                            titleList.add("");
+                        }else{
+                            titleList.add(title);
+                        }
+                        if (category == null){
+                            categoryList.add("");
+                        }else{
+                            categoryList.add(category);
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Log.d("22222222222222222222","222222222222222222222");
+        MonthlyRequest monthlyRequest = new MonthlyRequest(uid, dateOfYear, dateOfMonth, responseListener);
+        RequestQueue queue = Volley.newRequestQueue( requireContext() );
+        queue.add(monthlyRequest);
+
+
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerViewLog = root.findViewById(R.id.recyclerViewLog);
-        setLogView();
+        setLogView(titleList,countList,timeList,categoryList);
         setMonthView();
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.minusMonths(1);
+                String dateOfYear = String.valueOf(CalendarUtil.selectedDate.getYear());
+                String dateOfMonth = String.valueOf(CalendarUtil.selectedDate.getMonthValue());
+                String dateOfDay = String.valueOf(CalendarUtil.selectedDate.getDayOfMonth());
+
+//                setLogView();
                 setMonthView();
             }
         });
@@ -68,6 +159,7 @@ public class Fragment2 extends Fragment{
             @Override
             public void onClick(View view) {
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.plusMonths(1);
+//                setLogView();
                 setMonthView();
             }
         });
@@ -89,11 +181,13 @@ public class Fragment2 extends Fragment{
         recyclerView.setAdapter(adapter);
     }
 
-    private void setLogView(){
-        title = "기타";
-        count = 3;
-        time = "10:20:30";
-        LogAdapter logAdapter = new LogAdapter(title,count,time);
+    private void setLogView(ArrayList<String> titleArrayList, ArrayList<String> countArrayList, ArrayList<String> timeArrayList, ArrayList<String> categoryArrayList){
+        titleList = titleArrayList;
+        countList = countArrayList;
+        timeList = timeArrayList;
+        categoryList = categoryArrayList;
+
+        LogAdapter logAdapter = new LogAdapter(titleList,countList,timeList,categoryList);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         recyclerViewLog.setLayoutManager(manager);
         recyclerViewLog.setAdapter(logAdapter);
@@ -114,5 +208,6 @@ public class Fragment2 extends Fragment{
         }
         return dayList;
     }
+
 
 }
