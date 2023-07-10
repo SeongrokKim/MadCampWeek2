@@ -20,6 +20,9 @@
             android:name=".PracticeActivity"
             android:exported="false" />
         <activity
+            android:name=".LogDetail"
+            android:exported="false" />
+        <activity
             android:name=".KakaoActivity"
             android:exported="true" />
         <activity

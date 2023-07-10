@@ -35,11 +35,8 @@ public class Fragment2 extends Fragment{
     private ImageButton btnPrev;
     private ImageButton btnNext;
     private RecyclerView recyclerView;
-    private RecyclerView recyclerViewLog;
-    private String title;
-    private String count;
-    private String time;
-    private ArrayList<String> dateList, titleList, timeList, countList, journalList, categoryList;
+    public RecyclerView recyclerViewLog;
+    public ArrayList<String> dateList, titleList, timeList, countList, journalList, categoryList;
     private String uid;
 
     public Fragment2(String uid) {
@@ -72,7 +69,6 @@ public class Fragment2 extends Fragment{
         String dateOfYear = String.valueOf(CalendarUtil.selectedDate.getYear());
         String dateOfMonth = String.valueOf(CalendarUtil.selectedDate.getMonthValue());
 
-        Log.d("UID",uid);
 
         dateList = new ArrayList<String>();
         timeList = new ArrayList<String>();
@@ -80,7 +76,6 @@ public class Fragment2 extends Fragment{
         journalList = new ArrayList<String>();
         titleList = new ArrayList<String>();
         categoryList = new ArrayList<String>();
-        Log.d("1111111111111111111","1111111111111111111111111");
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -102,7 +97,7 @@ public class Fragment2 extends Fragment{
                         if (date == null){
                             dateList.add("");
                         }else{
-                            dateList.add(date);
+                            dateList.add(date.substring(0,10));
                         }
                         if (time == null){
                             timeList.add("");
@@ -137,7 +132,6 @@ public class Fragment2 extends Fragment{
                 }
             }
         };
-        Log.d("22222222222222222222","222222222222222222222");
         MonthlyRequest monthlyRequest = new MonthlyRequest(uid, dateOfYear, dateOfMonth, responseListener);
         RequestQueue queue = Volley.newRequestQueue( requireContext() );
         queue.add(monthlyRequest);
@@ -145,10 +139,8 @@ public class Fragment2 extends Fragment{
 
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerViewLog = root.findViewById(R.id.recyclerViewLog);
-        setLogView(titleList,countList,timeList,categoryList);
         setMonthView();
 
-//        Bundle bundle = getArguments();
 
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
@@ -157,9 +149,73 @@ public class Fragment2 extends Fragment{
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.minusMonths(1);
                 String dateOfYear = String.valueOf(CalendarUtil.selectedDate.getYear());
                 String dateOfMonth = String.valueOf(CalendarUtil.selectedDate.getMonthValue());
-                String dateOfDay = String.valueOf(CalendarUtil.selectedDate.getDayOfMonth());
 
-//                setLogView();
+                dateList = new ArrayList<String>();
+                timeList = new ArrayList<String>();
+                countList = new ArrayList<String>();
+                journalList = new ArrayList<String>();
+                titleList = new ArrayList<String>();
+                categoryList = new ArrayList<String>();
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject( response );
+                            JSONArray result = jsonObject.getJSONArray("result");
+                            Log.d("result",String.valueOf(result.length()));
+
+                            for (int i = 0; i < result.length(); i++) {
+                                JSONObject dataObject = result.getJSONObject(i);
+
+                                String date = dataObject.getString("date");
+                                String time = dataObject.getString("time");
+                                String count = dataObject.getString("count");
+                                String journal = dataObject.getString("journal");
+                                String title = dataObject.getString("title");
+                                String category = dataObject.getString("category");
+
+                                if (date == null){
+                                    dateList.add("");
+                                }else{
+                                    dateList.add(date.substring(0,10));
+                                }
+                                if (time == null){
+                                    timeList.add("");
+                                }else{
+                                    timeList.add(time);
+                                }
+                                if (count == null){
+                                    countList.add("");
+                                }else{
+                                    countList.add(count);
+                                }
+                                if (journal == null){
+                                    journalList.add("");
+                                }else{
+                                    journalList.add(journal);
+                                }
+                                if (title == null){
+                                    titleList.add("");
+                                }else{
+                                    titleList.add(title);
+                                }
+                                if (category == null){
+                                    categoryList.add("");
+                                }else{
+                                    categoryList.add(category);
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                MonthlyRequest monthlyRequest = new MonthlyRequest(uid, dateOfYear, dateOfMonth, responseListener);
+                RequestQueue queue = Volley.newRequestQueue( requireContext() );
+                queue.add(monthlyRequest);
+
                 setMonthView();
             }
         });
@@ -168,7 +224,75 @@ public class Fragment2 extends Fragment{
             @Override
             public void onClick(View view) {
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.plusMonths(1);
-//                setLogView();
+                String dateOfYear = String.valueOf(CalendarUtil.selectedDate.getYear());
+                String dateOfMonth = String.valueOf(CalendarUtil.selectedDate.getMonthValue());
+
+                dateList = new ArrayList<String>();
+                timeList = new ArrayList<String>();
+                countList = new ArrayList<String>();
+                journalList = new ArrayList<String>();
+                titleList = new ArrayList<String>();
+                categoryList = new ArrayList<String>();
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject( response );
+                            JSONArray result = jsonObject.getJSONArray("result");
+                            Log.d("result",String.valueOf(result.length()));
+
+                            for (int i = 0; i < result.length(); i++) {
+                                JSONObject dataObject = result.getJSONObject(i);
+
+                                String date = dataObject.getString("date");
+                                String time = dataObject.getString("time");
+                                String count = dataObject.getString("count");
+                                String journal = dataObject.getString("journal");
+                                String title = dataObject.getString("title");
+                                String category = dataObject.getString("category");
+
+                                if (date == null){
+                                    dateList.add("");
+                                }else{
+                                    dateList.add(date.substring(0,10));
+                                }
+                                if (time == null){
+                                    timeList.add("");
+                                }else{
+                                    timeList.add(time);
+                                }
+                                if (count == null){
+                                    countList.add("");
+                                }else{
+                                    countList.add(count);
+                                }
+                                if (journal == null){
+                                    journalList.add("");
+                                }else{
+                                    journalList.add(journal);
+                                }
+                                if (title == null){
+                                    titleList.add("");
+                                }else{
+                                    titleList.add(title);
+                                }
+                                if (category == null){
+                                    categoryList.add("");
+                                }else{
+                                    categoryList.add(category);
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                MonthlyRequest monthlyRequest = new MonthlyRequest(uid, dateOfYear, dateOfMonth, responseListener);
+                RequestQueue queue = Volley.newRequestQueue( requireContext() );
+                queue.add(monthlyRequest);
+
                 setMonthView();
             }
         });
@@ -184,19 +308,21 @@ public class Fragment2 extends Fragment{
     private void setMonthView(){
         myText.setText(yearMonthFromDate(CalendarUtil.selectedDate));
         ArrayList<LocalDate> dayList = daysInMonthArray(CalendarUtil.selectedDate);
-        CalendarAdapter adapter = new CalendarAdapter(dayList);
+        CalendarAdapter adapter = new CalendarAdapter(dayList, this);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
     }
 
-    private void setLogView(ArrayList<String> titleArrayList, ArrayList<String> countArrayList, ArrayList<String> timeArrayList, ArrayList<String> categoryArrayList){
+    private void setLogView(ArrayList<String> dateArrayList ,ArrayList<String> titleArrayList, ArrayList<String> countArrayList, ArrayList<String> journalArrayList, ArrayList<String> timeArrayList, ArrayList<String> categoryArrayList){
+        dateList = dateArrayList;
         titleList = titleArrayList;
         countList = countArrayList;
+        journalList = journalArrayList;
         timeList = timeArrayList;
         categoryList = categoryArrayList;
 
-        LogAdapter logAdapter = new LogAdapter(titleList,countList,timeList,categoryList);
+        LogAdapter logAdapter = new LogAdapter(dateList,titleList,countList,journalList,timeList,categoryList);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         recyclerViewLog.setLayoutManager(manager);
         recyclerViewLog.setAdapter(logAdapter);
