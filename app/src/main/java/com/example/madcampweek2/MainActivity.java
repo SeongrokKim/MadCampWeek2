@@ -3,6 +3,7 @@ package com.example.madcampweek2;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.annotation.SuppressLint;
 import android.widget.Toast;
 
+import com.example.madcampweek2.databinding.ActivityMainBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -60,25 +62,33 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        Intent intent = getIntent();
+        String UID = intent.getStringExtra("UID");
+
         fragment1 = new Fragment1();
-        fragment2 = new Fragment2();
+        fragment2 = new Fragment2(UID);
         fragment3 = new Fragment3();
         titleText = findViewById(R.id.titleText);
 
-        pager = findViewById(R.id.pager);
 
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-
-        pager.setAdapter(pagerAdapter);
-        pager.setOffscreenPageLimit(3);
+        Bundle bundle = new Bundle();
+        bundle.putString("UID", UID);
+        fragment2.setArguments(bundle);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.tab2);
         titleText.setText("홈");
+
+
+        pager = findViewById(R.id.pager);
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID);
+        pager.setAdapter(pagerAdapter);
+        pager.setOffscreenPageLimit(3);
         pager.setCurrentItem(1);
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            Intent intent = getIntent();
-            String UID = intent.getStringExtra("UID");
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.tab1){
@@ -91,10 +101,16 @@ public class MainActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.tab2) {
                     titleText.setText("홈");
                     pager.setCurrentItem(1);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("UID", UID);
+                    fragment2.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
                 } else if (item.getItemId() == R.id.tab3) {
                     titleText.setText("설정");
                     pager.setCurrentItem(2);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("UID", UID);
+                    fragment3.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commit();
                 }
                 return true;
@@ -135,14 +151,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
         String name = intent.getStringExtra("name");
         String photoUri = intent.getStringExtra("photoUri");
-        //Toast.makeText(getApplicationContext(),intent.getStringExtra("photoUri"),Toast.LENGTH_SHORT).show();
-        if (photoUri != null) {
-            Glide.with(profile).load(photoUri).circleCrop().into(profile);
-        } else {
+//        Toast.makeText(getApplicationContext(), photoUri,Toast.LENGTH_SHORT).show();
+        if (photoUri == null){
             Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
+        } else if (photoUri.equals("null")){
+            Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
+        } else {
+            Glide.with(profile).load(photoUri).circleCrop().into(profile);
         }
         if (name != null){
             nickname.setText(name);

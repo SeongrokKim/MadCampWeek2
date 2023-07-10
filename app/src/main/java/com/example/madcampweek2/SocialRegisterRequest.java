@@ -12,7 +12,7 @@ import java.util.UUID;
 public class SocialRegisterRequest extends StringRequest {
 
     //서버 URL 설정
-    final static private String URL = "https://99f7-192-249-19-234.ngrok-free.app/sregister";
+    final static private String URL = urlLink.url+"/sregister";
     private Map<String, String> map;
     //private Map<String, String>parameters;
 
