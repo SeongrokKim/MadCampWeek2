@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.health.SystemHealthManager;
 import android.view.LayoutInflater;
@@ -16,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 import org.w3c.dom.Text;
 
@@ -42,6 +47,8 @@ public class Fragment1_detail extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment1_detail, container, false);
         Bundle bundle = getArguments();
+        String newtext = bundle.getString("content");
+        String no = bundle.getString("no");
         String my_uid = bundle.getString("my_uid"); //유저 uid
         String uid = bundle.getString("uid"); //글쓴이 uid
         String title = bundle.getString("title");
@@ -59,12 +66,21 @@ public class Fragment1_detail extends Fragment {
         if(text == "null"){
             text = "";
         }
-        textView.setText(text);
+        if(newtext != null){
+            textView.setText(newtext);
+        }
+        else{
+            textView.setText(text);
+        }
         menuView = view.findViewById(R.id.menuView);
+
+        System.out.println("mine:"+my_uid);
+        System.out.println("writer:"+uid);
 
         if(!my_uid.equals(uid)){
             menuView.setVisibility(View.INVISIBLE);
         }
+        String finalText = text;
         menuView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -75,6 +91,21 @@ public class Fragment1_detail extends Fragment {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.edit_btn){
                             Toast.makeText(requireContext(), "게시글 수정", Toast.LENGTH_SHORT).show();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("no", no);
+                            bundle.putString("my_uid", my_uid);
+                            bundle.putString("uid", uid);
+                            bundle.putString("text", finalText);
+                            bundle.putString("title", title);
+                            bundle.putString("name", name);
+                            bundle.putString("datetime", datetime);
+                            Fragment1_edit fragment1_edit = new Fragment1_edit();
+                            fragment1_edit.setArguments(bundle);
+                            FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.container, fragment1_edit);
+//                            fragmentTransaction.addToBackStack("detail");
+                            fragmentTransaction.commit();
+
                         }else {
                             Toast.makeText(requireContext(), "게시글 삭제", Toast.LENGTH_SHORT).show();
                             // 다이얼로그를 생성하기 위한 빌더 객체 생성
@@ -93,8 +124,14 @@ public class Fragment1_detail extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // 게시글 삭제 코드 등을 작성
-
+                                    DeleteBoardRequest deleteBoardRequest = new DeleteBoardRequest(no, null);
+                                    RequestQueue queue = Volley.newRequestQueue( requireContext() );
+                                    queue.add(deleteBoardRequest);
                                     dialog.dismiss(); // 다이얼로그 닫기
+                                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                                    if (fragmentManager.getBackStackEntryCount() > 0) {
+                                        fragmentManager.popBackStack();
+                                    }
                                 }
                             });
                             // 다이얼로그 생성 및 표시

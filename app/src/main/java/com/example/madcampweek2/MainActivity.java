@@ -83,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.tab2);
         titleText.setText("홈");
 
+//        Intent intent1 = new Intent(MainActivity.this, PracticeActivity.class);
+//        startActivity(intent1);
+
 
         pager = findViewById(R.id.pager);
         MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID);
