@@ -4,37 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="30dp"
+    android:layout_marginBottom="50dp"
     tools:context=".SettingFragment">
-
-    <!-- TODO: Update blank fragment layout -->
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
 
 
         <Button
             android:id="@+id/pw_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="56dp"
             android:text="비밀번호 변경"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            tools:layout_editor_absoluteX="140dp"
+            tools:layout_editor_absoluteY="455dp" />
 
         <Button
             android:id="@+id/profile_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="57dp"
             android:text="프로필 사진 변경"
-            app:layout_constraintBottom_toTopOf="@+id/nickname_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.0" />
+            tools:layout_editor_absoluteX="132dp"
+            tools:layout_editor_absoluteY="357dp" />
 
         <ImageView
             android:id="@+id/profileView"
@@ -77,13 +72,9 @@
             android:id="@+id/introView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="196dp"
             android:text="이것은 한줄소개입니다. 가나다라마바사"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            tools:layout_editor_absoluteX="90dp" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -159,17 +150,6 @@
                     app:layout_constraintVertical_bias="0.2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/nickname_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
-            android:text="닉네임 변경"
-            app:layout_constraintBottom_toTopOf="@+id/pw_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
