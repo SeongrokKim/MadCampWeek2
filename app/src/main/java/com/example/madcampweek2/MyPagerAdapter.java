@@ -13,8 +13,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
-    public MyPagerAdapter(@NonNull FragmentManager fm) {
+
+    private String uid;
+
+    public MyPagerAdapter(@NonNull FragmentManager fm, String uid) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        this.uid = uid;
     }
 
     @NonNull
@@ -22,9 +26,12 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
+
                 return new Fragment1();
             case 1:
-                return new Fragment2();
+                Fragment2 fragment2 = new Fragment2(uid);
+                System.out.println("in Adapter:"+uid);
+                return fragment2;
             case 2:
                 return new Fragment3();
             default:

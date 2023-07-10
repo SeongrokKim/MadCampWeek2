@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class ValidateRequest extends StringRequest {
     //서버 url 설정
-    final static private String URL="https://99f7-192-249-19-234.ngrok-free.app/valid";
+    final static private String URL=urlLink.url+"/valid";
     private Map<String, String> map;
 
     public ValidateRequest(String ID, Response.Listener<String> listener){

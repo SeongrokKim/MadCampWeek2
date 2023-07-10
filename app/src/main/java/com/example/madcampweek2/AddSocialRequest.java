@@ -13,7 +13,7 @@ import java.util.Map;
 public class AddSocialRequest extends StringRequest {
 
     //서버 URL 설정
-    final static private String URL = "https://99f7-192-249-19-234.ngrok-free.app/board";
+    final static private String URL = urlLink.url+"/board";
     private Map<String, String> map;
 
     public AddSocialRequest(String uid, String title, String content, Response.Listener<String> listener) {
