@@ -71,12 +71,10 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Google 로그인에 성공한 경우
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d("kfnjkasnfkajnfnsdkfnsdnfjnskdfnajsnfjnaksdf",account.getDisplayName());
                 // 사용자 이름과 이미지를 가져옵니다.
                 String name = account.getDisplayName();
                 Uri photoUri = account.getPhotoUrl();
                 String email = account.getEmail();
-                Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
                 final String[] uid = {null};
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -111,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google 로그인에 실패한 경우
 
-                Toast.makeText(getApplicationContext(),"Google Sign-in failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"구글 로그인 실패", Toast.LENGTH_SHORT).show();
                 // 실패 처리를 수행합니다.
             }
         }
@@ -175,7 +173,6 @@ public class LoginActivity extends AppCompatActivity {
                 String UserId = login_id.getText().toString();
                 String UserPwd = login_password.getText().toString();
 
-
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -207,6 +204,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 };
+
                 LoginRequest loginRequest = new LoginRequest( UserId, UserPwd, responseListener );
                 RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
                 queue.add( loginRequest );

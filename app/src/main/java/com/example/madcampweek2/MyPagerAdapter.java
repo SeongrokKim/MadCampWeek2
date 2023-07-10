@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
     private String uid;
-
     public MyPagerAdapter(@NonNull FragmentManager fm, String uid) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.uid = uid;
@@ -30,7 +29,6 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
                 return new Fragment1();
             case 1:
                 Fragment2 fragment2 = new Fragment2(uid);
-                System.out.println("in Adapter:"+uid);
                 return fragment2;
             case 2:
                 return new Fragment3();
