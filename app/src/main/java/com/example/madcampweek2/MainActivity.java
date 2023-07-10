@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Intent intent = getIntent();
-        String UID = intent.getStringExtra("UID");
-
         fragment1 = new Fragment1();
         fragment2 = new Fragment2(UID);
         fragment3 = new Fragment3();
@@ -85,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
         bottomNavigationView.setSelectedItemId(R.id.tab2);
         titleText.setText("홈");
+
+//        Intent intent1 = new Intent(MainActivity.this, PracticeActivity.class);
+//        startActivity(intent1);
 
 
         pager = findViewById(R.id.pager);

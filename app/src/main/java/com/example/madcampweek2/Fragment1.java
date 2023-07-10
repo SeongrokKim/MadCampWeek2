@@ -1,33 +1,21 @@
 package com.example.madcampweek2;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.health.SystemHealthManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.madcampweek2.databinding.FragmentFragment1Binding;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +23,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import androidx.appcompat.widget.SearchView;
 
-public class Fragment1 extends Fragment {
+public class Fragment1 extends Fragment implements SearchView.OnQueryTextListener {
 
     private Fragment1ViewModel mViewModel;
 
@@ -45,8 +34,10 @@ public class Fragment1 extends Fragment {
     }
 
     private RecyclerView recyclerView;
+    private androidx.appcompat.widget.SearchView searchView;
     private ImageView add_btn;
     private MyAdapter adapter;
+    private List<String> noList;
     private List<String> uidList;
     private List<String> titleList;
     private List<String> nameList;
@@ -67,6 +58,7 @@ public class Fragment1 extends Fragment {
         // RecyclerView 초기화
         recyclerView = rootView.findViewById(R.id.recyclerView);
         add_btn = rootView.findViewById(R.id.add_btn);
+        searchView = rootView.findViewById(R.id.searchView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // 데이터 리스트 초기화
@@ -75,6 +67,7 @@ public class Fragment1 extends Fragment {
         datetimeList = new ArrayList<>();
         textList = new ArrayList<>();
         uidList = new ArrayList<>(); //로그인한 유저 말고 글쓴 유저 uid 리스트
+        noList = new ArrayList<>();
 
         // UID 가져오기
         Bundle bundle = getArguments();
@@ -95,8 +88,9 @@ public class Fragment1 extends Fragment {
                 fragmentTransaction.replace(R.id.container, fragment1_add);
                 fragmentTransaction.addToBackStack(null);
                 recyclerView.setVisibility(View.INVISIBLE);
+                add_btn.setVisibility(View.INVISIBLE);
+                searchView.setVisibility(View.INVISIBLE);
                 fragmentTransaction.commit();
-
             }
         });
 
@@ -113,7 +107,7 @@ public class Fragment1 extends Fragment {
 
                     for (int i = 0; i < result.length(); i++) {
                         JSONObject dataObject = result.getJSONObject(i);
-
+                        String no = String.valueOf(dataObject.getInt("no"));
                         String uid = dataObject.getString("uid");
                         String name = dataObject.getString("name"); // "name"은 배열의 각 객체에서 정의한 키
                         String datetime = dataObject.getString("datetime");
@@ -128,7 +122,7 @@ public class Fragment1 extends Fragment {
                         nameList.add(name);
                         datetimeList.add(datetime.replaceAll("[^0-9:-]", " "));
                         textList.add(text);
-
+                        noList.add(no);
                     }
                     // 어댑터 갱신
                     adapter.notifyDataSetChanged();
@@ -143,10 +137,57 @@ public class Fragment1 extends Fragment {
         queue.add(socialTextRequest);
 
         // 어댑터 초기화 및 RecyclerView에 설정
-        adapter = new MyAdapter(uidList, titleList, nameList, datetimeList, textList);
+        adapter = new MyAdapter(uidList, titleList, nameList, datetimeList, textList, noList);
         recyclerView.setAdapter(adapter);
 
+        SearchView searchView = rootView.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
+
         return rootView;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        // 입력된 텍스트를 사용하여 데이터를 필터링
+        List<String> filteredUidList = new ArrayList<>();
+        List<String> filteredTitleList = new ArrayList<>();
+        List<String> filteredNameList = new ArrayList<>();
+        List<String> filteredDatetimeList = new ArrayList<>();
+        List<String> filteredTextList = new ArrayList<>();
+        List<String> filteredNoList = new ArrayList<>();
+
+        for (int i = 0; i < titleList.size(); i++) {
+            String title = titleList.get(i);
+            String text = textList.get(i);
+            String name = nameList.get(i);
+            Boolean check = title.toLowerCase().contains(newText.toLowerCase()) || text.toLowerCase().contains(newText.toLowerCase());
+            if (check||name.toLowerCase().contains(newText.toLowerCase())) {
+                filteredUidList.add(uidList.get(i));
+                filteredTitleList.add(title);
+                filteredNameList.add(name);
+                filteredDatetimeList.add(datetimeList.get(i));
+                filteredTextList.add(text);
+                filteredNoList.add(noList.get(i));
+            }
+        }
+        adapter.setData(filteredUidList, filteredTitleList, filteredNameList, filteredDatetimeList, filteredTextList, filteredNoList);
+        adapter.notifyDataSetChanged();
+        return true;
+    }
+
+    private List<String> filterData(List<String> dataList, String query) {
+        List<String> filteredList = new ArrayList<>();
+        for (String item : dataList) {
+            if (item.toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        return filteredList;
     }
 
     // RecyclerView 어댑터 클래스
@@ -156,13 +197,23 @@ public class Fragment1 extends Fragment {
         private List<String> name;
         private List<String> datetime;
         private List<String> text;
+        private List<String> no;
 
-        public MyAdapter(List<String> uid, List<String> title, List<String> name, List<String> datetime, List<String> text) {
+        public MyAdapter(List<String> uid, List<String> title, List<String> name, List<String> datetime, List<String> text, List<String> no) {
             this.uid = uid;
             this.title = title;
             this.name = name;
             this.datetime = datetime;
             this.text = text;
+            this.no = no;
+        }
+        public void setData(List<String> uid, List<String> title, List<String> name, List<String> datetime, List<String> text, List<String> no) {
+            this.uid = uid;
+            this.title = title;
+            this.name = name;
+            this.datetime = datetime;
+            this.text = text;
+            this.no = no;
         }
 
         @Override
@@ -210,9 +261,11 @@ public class Fragment1 extends Fragment {
                 String itemName = name.get(position);
                 String itemDatetime = datetime.get(position);
                 String itemText = text.get(position);
+                String itemNo = no.get(position);
 
                 Fragment1_detail fragment = new Fragment1_detail();
                 Bundle bundle = new Bundle();
+                bundle.putString("no", itemNo);
                 bundle.putString("my_uid", UID[0]);
                 bundle.putString("uid", itemUid);
                 bundle.putString("title", itemTitle);
@@ -224,10 +277,11 @@ public class Fragment1 extends Fragment {
                 FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(null);
+
                 recyclerView.setVisibility(View.INVISIBLE);
+                add_btn.setVisibility(View.INVISIBLE);
+                searchView.setVisibility(View.INVISIBLE);
                 fragmentTransaction.commit();
-
-
             }
 
             public void bind(String itemTitle, String itemName, String itemDatetime) {
