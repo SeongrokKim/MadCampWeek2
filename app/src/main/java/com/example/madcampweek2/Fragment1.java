@@ -47,11 +47,14 @@ public class Fragment1 extends Fragment {
     private RecyclerView recyclerView;
     private ImageView add_btn;
     private MyAdapter adapter;
+    private List<String> uidList;
     private List<String> titleList;
     private List<String> nameList;
     private List<String> datetimeList;
     private List<String> textList;
     private FragmentFragment1Binding binding;
+
+    final String[] UID = {null};
 
     public Fragment1() {
         // Required empty public constructor
@@ -71,19 +74,20 @@ public class Fragment1 extends Fragment {
         nameList = new ArrayList<>();
         datetimeList = new ArrayList<>();
         textList = new ArrayList<>();
+        uidList = new ArrayList<>(); //로그인한 유저 말고 글쓴 유저 uid 리스트
 
         // UID 가져오기
         Bundle bundle = getArguments();
-        final String[] uid = {null};
+
         if(bundle != null){
-            uid[0] = bundle.getString("UID");
+            UID[0] = bundle.getString("UID");
         }
 
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle1 = new Bundle();
-                bundle1.putString("uid", uid[0]);
+                bundle1.putString("uid", UID[0]);
                 Fragment1_add fragment1_add = new Fragment1_add();
                 fragment1_add.setArguments(bundle1);
 
@@ -110,6 +114,7 @@ public class Fragment1 extends Fragment {
                     for (int i = 0; i < result.length(); i++) {
                         JSONObject dataObject = result.getJSONObject(i);
 
+                        String uid = dataObject.getString("uid");
                         String name = dataObject.getString("name"); // "name"은 배열의 각 객체에서 정의한 키
                         String datetime = dataObject.getString("datetime");
                         String title = dataObject.getString("title");
@@ -118,6 +123,7 @@ public class Fragment1 extends Fragment {
                         datetime = datetime.substring(0, datetime.length() - 5);
 
                         // 데이터 추가
+                        uidList.add(uid);
                         titleList.add(title);
                         nameList.add(name);
                         datetimeList.add(datetime.replaceAll("[^0-9:-]", " "));
@@ -137,7 +143,7 @@ public class Fragment1 extends Fragment {
         queue.add(socialTextRequest);
 
         // 어댑터 초기화 및 RecyclerView에 설정
-        adapter = new MyAdapter(titleList, nameList, datetimeList, textList);
+        adapter = new MyAdapter(uidList, titleList, nameList, datetimeList, textList);
         recyclerView.setAdapter(adapter);
 
         return rootView;
@@ -145,12 +151,14 @@ public class Fragment1 extends Fragment {
 
     // RecyclerView 어댑터 클래스
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+        private List<String> uid;
         private List<String> title;
         private List<String> name;
         private List<String> datetime;
         private List<String> text;
 
-        public MyAdapter(List<String> title, List<String> name, List<String> datetime, List<String> text) {
+        public MyAdapter(List<String> uid, List<String> title, List<String> name, List<String> datetime, List<String> text) {
+            this.uid = uid;
             this.title = title;
             this.name = name;
             this.datetime = datetime;
@@ -197,6 +205,7 @@ public class Fragment1 extends Fragment {
                 int position = getAdapterPosition();
 
                 // 클릭한 아이템의 데이터를 가져옵니다.
+                String itemUid = uid.get(position);
                 String itemTitle = title.get(position);
                 String itemName = name.get(position);
                 String itemDatetime = datetime.get(position);
@@ -204,6 +213,8 @@ public class Fragment1 extends Fragment {
 
                 Fragment1_detail fragment = new Fragment1_detail();
                 Bundle bundle = new Bundle();
+                bundle.putString("my_uid", UID[0]);
+                bundle.putString("uid", itemUid);
                 bundle.putString("title", itemTitle);
                 bundle.putString("name", itemName);
                 bundle.putString("datetime", itemDatetime);

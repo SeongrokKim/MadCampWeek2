@@ -25,6 +25,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
+
                 return new Fragment1();
             case 1:
                 Fragment2 fragment2 = new Fragment2(uid);

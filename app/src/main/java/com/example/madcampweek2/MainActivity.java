@@ -55,10 +55,16 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem prevMenuItem;
     private ActivityMainBinding binding;
 
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String UID = intent.getStringExtra("UID");
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         fragment2.setArguments(bundle);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
         bottomNavigationView.setSelectedItemId(R.id.tab2);
         titleText.setText("홈");
 
@@ -99,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment1.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
                 } else if (item.getItemId() == R.id.tab2) {
+                    System.out.println("UID::::"+UID);
                     titleText.setText("홈");
                     pager.setCurrentItem(1);
                     Bundle bundle = new Bundle();

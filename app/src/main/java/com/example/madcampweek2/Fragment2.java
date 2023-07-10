@@ -11,10 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,7 +27,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Fragment2 extends Fragment{
 
@@ -47,7 +44,14 @@ public class Fragment2 extends Fragment{
 
     public Fragment2(String uid) {
         this.uid=uid;
+
         // Required empty public constructor
+        this.uid = uid;
+    }
+
+
+    public String getUID(){
+        return this.uid;
     }
 
 
@@ -58,6 +62,8 @@ public class Fragment2 extends Fragment{
         binding = FragmentFragment2Binding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        System.out.println("UID:::"+uid);
+        System.out.println("getUID:::"+this.getUID());
         myText = root.findViewById(R.id.myText);
         btnPrev = root.findViewById(R.id.btn_prev);
         btnNext = root.findViewById(R.id.btn_next);
@@ -142,6 +148,9 @@ public class Fragment2 extends Fragment{
         setLogView(titleList,countList,timeList,categoryList);
         setMonthView();
 
+//        Bundle bundle = getArguments();
+
+
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,6 +217,5 @@ public class Fragment2 extends Fragment{
         }
         return dayList;
     }
-
 
 }
