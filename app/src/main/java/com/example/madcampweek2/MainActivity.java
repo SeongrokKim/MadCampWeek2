@@ -64,13 +64,21 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String UID = intent.getStringExtra("UID");
+        String name = intent.getStringExtra("name");
+        String photoUri;
+        String intro = intent.getStringExtra("intro");
+        if (intent.getStringExtra("photoUri") == null){
+            photoUri = "null";
+        }else{
+            photoUri = intent.getStringExtra("photoUri");
+        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         fragment1 = new Fragment1();
         fragment2 = new Fragment2(UID);
-        fragment3 = new Fragment3();
+        fragment3 = new Fragment3(UID, name, photoUri, intro);
         titleText = findViewById(R.id.titleText);
 
 
@@ -88,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         pager = findViewById(R.id.pager);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID);
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID, name, photoUri, intro);
         pager.setAdapter(pagerAdapter);
         pager.setOffscreenPageLimit(3);
         pager.setCurrentItem(1);
@@ -118,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                     pager.setCurrentItem(2);
                     Bundle bundle = new Bundle();
                     bundle.putString("UID", UID);
+                    bundle.putString("name", name);
+                    bundle.putString("photoUri", photoUri);
                     fragment3.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commit();
                 }
@@ -159,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        String name = intent.getStringExtra("name");
-        String photoUri = intent.getStringExtra("photoUri");
 //        Toast.makeText(getApplicationContext(), photoUri,Toast.LENGTH_SHORT).show();
         if (photoUri == null){
             Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
