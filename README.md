@@ -37,7 +37,7 @@
 
 ### 메인 화면
 - **앱 실행**
-![메인](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/4015da01-f564-4a4e-9938-fa177713ff7e)
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/4015da01-f564-4a4e-9938-fa177713ff7e" width="250" height="500"/>
 
 - **핵심 기능**
   - 바텀 네비게이션을 통해 탭을 이동할 수 있습니다.
@@ -53,7 +53,7 @@
 
 ### 메트로놈, 연습 기록 화면
 - **앱 실행**
-![패널](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/ff2325eb-a6ca-4485-94b6-8b50948f44cf)
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/ff2325eb-a6ca-4485-94b6-8b50948f44cf" width="250" height="500"/>
 
 - **핵심 기능**
   - 메트로놈 기능을 통해 박자를 맞춰 연습할 수 있습니다.
@@ -71,7 +71,7 @@
 
 ### 게시판 탭
 - **앱 실행**
-![게시판](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/fbf8a78d-2cfd-4078-8b5e-4e2ec2800aee)
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/fbf8a78d-2cfd-4078-8b5e-4e2ec2800aee" width="250" height="500"/>
 
 - **핵심 기능**
   - 게시글을 작성할 수 있습니다.
@@ -86,7 +86,7 @@
 
 ### 홈 탭
 - **앱 실행**
-![홈](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/17a3d0f9-bc43-4a96-a6a7-6ed6219db47a)
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/17a3d0f9-bc43-4a96-a6a7-6ed6219db47a" width="250" height="500"/>
 
 - **핵심 기능**
   - 달력을 통해 날짜를 확인할 수 있습니다.
@@ -105,8 +105,7 @@
 
 ### 설정 탭
 - **앱 실행**
-![설정](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/15a1d1db-1cf5-4475-9517-5a96f4b55812)
-
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/15a1d1db-1cf5-4475-9517-5a96f4b55812" width="250" height="500"/>
 
 - **핵심 기능**
   - 본인의 프로필 사진, 이름, 한 줄 소개를 확인할 수 있습니다.
