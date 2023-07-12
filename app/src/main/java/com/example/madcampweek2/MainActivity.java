@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,7 +58,7 @@ import kotlin.jvm.functions.Function1;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
-    private ImageView profile;
+    public ImageView profile;
     private TextView nickname;
     private DrawerLayout drawerLayout;
     private ImageView btnOpenPanel;
@@ -81,13 +83,19 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String UID = intent.getStringExtra("UID");
+        String name = intent.getStringExtra("name");
+        String photoUri = intent.getStringExtra("photo");
+        String intro = intent.getStringExtra("intro");
+        Log.d("photoUri", photoUri);
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         fragment1 = new Fragment1(UID);
         fragment2 = new Fragment2(UID);
-        fragment3 = new Fragment3(UID);
+        fragment3 = new Fragment3(UID, name, photoUri, intro);
+
         titleText = findViewById(R.id.titleText);
         rankView = findViewById(R.id.rankView);
 
@@ -103,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         titleText.setText("홈");
 
         pager = findViewById(R.id.pager);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID);
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID, name, photoUri, intro);
         pager.setAdapter(pagerAdapter);
         pager.setOffscreenPageLimit(3);
         pager.setCurrentItem(1);
@@ -163,15 +171,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        String name = intent.getStringExtra("name");
-        String photoUri = intent.getStringExtra("photoUri");
 //        Toast.makeText(getApplicationContext(), photoUri,Toast.LENGTH_SHORT).show();
-        if (photoUri == null){
-            Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
-        } else if (photoUri.equals("null")){
-            Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
-        } else {
-            Glide.with(profile).load(photoUri).circleCrop().into(profile);
+        if (photoUri != null && !photoUri.equals("null")){
+            Glide.with(this)
+                    .load(Uri.parse(photoUri))
+                    .circleCrop()
+                    .into(profile);
+
+        }else{
+            Glide.with(this).load(R.drawable.init_profile).circleCrop().into(profile);
         }
         if (name != null){
             nickname.setText(name);
@@ -327,25 +335,6 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-//
-//    private boolean doubleBackToExitPressedOnce = false;
-//
-//    @Override
-//    public void onBackPressed() {
-//        if (doubleBackToExitPressedOnce) {
-//            super.onBackPressed();
-//            return;
-//        }
-//
-//        this.doubleBackToExitPressedOnce = true;
-//        Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                doubleBackToExitPressedOnce = false;
-//            }
-//        }, 2000);
-//    }
+
 }
 

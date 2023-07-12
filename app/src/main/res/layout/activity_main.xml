@@ -150,34 +150,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/tun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="40dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/met">
-
-            <ImageView
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/icon_tuner" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="튜너"
-                android:textSize="25sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/met"
             android:layout_marginTop="40dp"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/tun">
