@@ -22,8 +22,12 @@
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".PracticeActivity"
+            android:name=".MetronomeActivity"
+            android:label="Metronome"
             android:exported="false" />
+        <activity
+            android:name=".PracticeActivity"
+            android:exported="true" />
         <activity
             android:name=".LogDetail"
             android:exported="false" />

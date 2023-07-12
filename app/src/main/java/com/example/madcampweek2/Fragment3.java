@@ -22,6 +22,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
@@ -74,6 +75,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -96,6 +104,7 @@ public class Fragment3 extends Fragment {
         this.userName = name;
         this.userPhotoUri = photoUri;
         this.intro = intro;
+
     }
 
 
@@ -337,9 +346,10 @@ public class Fragment3 extends Fragment {
             Glide.with(getContext()).load(R.drawable.init_profile).circleCrop().into(pannelImage);
         }
 
-
+      
         return root;
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){

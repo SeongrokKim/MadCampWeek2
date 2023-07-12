@@ -27,10 +27,13 @@ import androidx.appcompat.widget.SearchView;
 
 public class Fragment1 extends Fragment implements SearchView.OnQueryTextListener {
 
-    private Fragment1ViewModel mViewModel;
+//    private Fragment1ViewModel mViewModel;
 
-    public static Fragment1 newInstance() {
-        return new Fragment1();
+    private String UID;
+
+    public Fragment1(String uid) {
+        // Required empty public constructor
+        this.UID=uid;
     }
 
     private RecyclerView recyclerView;
@@ -45,7 +48,6 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
     private List<String> textList;
     private FragmentFragment1Binding binding;
 
-    final String[] UID = {null};
 
     public Fragment1() {
         // Required empty public constructor
@@ -71,25 +73,20 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
 
         // UID 가져오기
         Bundle bundle = getArguments();
-
-        if(bundle != null){
-            UID[0] = bundle.getString("UID");
-        }
-
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle1 = new Bundle();
-                bundle1.putString("uid", UID[0]);
+                bundle1.putString("uid", UID);
                 Fragment1_add fragment1_add = new Fragment1_add();
                 fragment1_add.setArguments(bundle1);
 
                 FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, fragment1_add);
                 fragmentTransaction.addToBackStack(null);
-                recyclerView.setVisibility(View.INVISIBLE);
-                add_btn.setVisibility(View.INVISIBLE);
-                searchView.setVisibility(View.INVISIBLE);
+//                recyclerView.setVisibility(View.INVISIBLE);
+//                add_btn.setVisibility(View.INVISIBLE);
+//                searchView.setVisibility(View.INVISIBLE);
                 fragmentTransaction.commit();
             }
         });
@@ -266,7 +263,7 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
                 Fragment1_detail fragment = new Fragment1_detail();
                 Bundle bundle = new Bundle();
                 bundle.putString("no", itemNo);
-                bundle.putString("my_uid", UID[0]);
+                bundle.putString("my_uid", UID);
                 bundle.putString("uid", itemUid);
                 bundle.putString("title", itemTitle);
                 bundle.putString("name", itemName);
@@ -278,9 +275,9 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(null);
 
-                recyclerView.setVisibility(View.INVISIBLE);
-                add_btn.setVisibility(View.INVISIBLE);
-                searchView.setVisibility(View.INVISIBLE);
+//                recyclerView.setVisibility(View.INVISIBLE);
+//                add_btn.setVisibility(View.INVISIBLE);
+//                searchView.setVisibility(View.INVISIBLE);
                 fragmentTransaction.commit();
             }
 

@@ -1,17 +1,21 @@
 package com.example.madcampweek2;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
+import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +32,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.annotation.SuppressLint;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.madcampweek2.databinding.ActivityMainBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,8 +45,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kakao.sdk.user.UserApiClient;
 import com.bumptech.glide.Glide;
 
-import java.io.ByteArrayOutputStream;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -59,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private MenuItem prevMenuItem;
     private ActivityMainBinding binding;
+    private LinearLayout practiceView, metronomeView;
+    private ImageView rankView;
 
+    private List<String> uidList, nameList, totList, rankList;
 
 
     @SuppressLint("MissingInflatedId")
@@ -78,10 +92,14 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        fragment1 = new Fragment1();
+        fragment1 = new Fragment1(UID);
         fragment2 = new Fragment2(UID);
         fragment3 = new Fragment3(UID, name, photoUri, intro);
+
         titleText = findViewById(R.id.titleText);
+        rankView = findViewById(R.id.rankView);
+
+
 
 
         Bundle bundle = new Bundle();
@@ -89,13 +107,8 @@ public class MainActivity extends AppCompatActivity {
         fragment2.setArguments(bundle);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
         bottomNavigationView.setSelectedItemId(R.id.tab2);
         titleText.setText("홈");
-
-//        Intent intent1 = new Intent(MainActivity.this, PracticeActivity.class);
-//        startActivity(intent1);
-
 
         pager = findViewById(R.id.pager);
         MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID, name, photoUri, intro);
@@ -111,27 +124,12 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.tab1){
                     titleText.setText("게시판");
                     pager.setCurrentItem(0);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("UID", UID);
-                    fragment1.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
                 } else if (item.getItemId() == R.id.tab2) {
-                    System.out.println("UID::::"+UID);
                     titleText.setText("홈");
                     pager.setCurrentItem(1);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("UID", UID);
-                    fragment2.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
                 } else if (item.getItemId() == R.id.tab3) {
                     titleText.setText("설정");
                     pager.setCurrentItem(2);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("UID", UID);
-                    bundle.putString("name", name);
-                    bundle.putString("photoUri", photoUri);
-                    fragment3.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commit();
                 }
                 return true;
             }
@@ -162,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
         nickname = findViewById(R.id.nickname);
 
         drawerLayout = findViewById(R.id.drawer_layout);
+        practiceView = findViewById(R.id.book);
+        metronomeView = findViewById(R.id.met);
 
         btnOpenPanel = findViewById(R.id.btn_open_panel);
         btnOpenPanel.setOnClickListener(new View.OnClickListener() {
@@ -184,8 +184,6 @@ public class MainActivity extends AppCompatActivity {
         if (name != null){
             nickname.setText(name);
         }
-
-
         btnLogout = findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,6 +220,67 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        rankView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                uidList = new ArrayList<>();
+                nameList = new ArrayList<>();
+                totList = new ArrayList<>();
+                rankList = new ArrayList<>();
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject( response );
+                            JSONArray result = jsonObject.getJSONArray("result");
+
+                            for (int i = 0; i < result.length(); i++) {
+                                JSONObject dataObject = result.getJSONObject(i);
+                                String uid = dataObject.getString("uid");
+                                String name = dataObject.getString("name");
+                                String total_time = dataObject.getString("total_time");
+                                String rank = dataObject.getString("rank");
+
+                                System.out.println("tine::::"+total_time);
+                                // 데이터 추가
+                                uidList.add(uid);
+                                nameList.add(name);
+//                                totList.add(datetime.replaceAll("[^0-9:-]", " "));
+                                totList.add(total_time);
+                                rankList.add(rank);
+
+                            }
+                            showRankListDialog(MainActivity.this, rankList, nameList, totList, UID);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RankRequest rankRequest = new RankRequest(responseListener);
+                RequestQueue queue = Volley.newRequestQueue( getApplicationContext() );
+                queue.add(rankRequest);
+            }
+        });
+
+        metronomeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(MainActivity.this, MetronomeActivity.class);
+                intent1.putExtra("uid", UID);
+                startActivity(intent1);
+            }
+        });
+
+        practiceView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(MainActivity.this, PracticeActivity.class);
+                intent1.putExtra("uid", UID);
+                startActivity(intent1);
+            }
+        });
+
     }
     private void changeTitle(int pos){
         if(pos==0){
@@ -233,16 +292,48 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public byte[] binaryStringToByteArray(String binaryString) {
-        int len = binaryString.length() / 8;
-        byte[] byteArray = new byte[len];
+    private void showRankListDialog(Context context, List<String> ranks, List<String> names, List<String> totals, String UID) {
+        // 다이얼로그 레이아웃 가져오기
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.dialog_rank_list, null);
 
-        for (int i = 0; i < len; i++) {
-            String byteString = binaryString.substring(i * 8, (i + 1) * 8);
-            byteArray[i] = (byte) Integer.parseInt(byteString, 2);
+        LinearLayout rankContainer = dialogView.findViewById(R.id.rank_container);
+
+        for (int i = 0; i < ranks.size(); i++) {
+            String rank = ranks.get(i);
+            String name = names.get(i);
+            String total = totals.get(i);
+
+            View rankItemView = inflater.inflate(R.layout.dialog_rank_list, rankContainer, false);
+
+            TextView rankTextView = rankItemView.findViewById(R.id.rank_text_view);
+            TextView nameTextView = rankItemView.findViewById(R.id.name_text_view);
+            TextView totalTextView = rankItemView.findViewById(R.id.total_text_view);
+
+            rankTextView.setText(rank);
+            nameTextView.setText(name);
+            totalTextView.setText(total);
+
+            // 현재 사용자의 UID와 랭킹 항목의 UID 비교하여 테두리 스타일 설정
+            if (UID.equals(uidList.get(i))) {
+                rankItemView.setBackgroundResource(R.drawable.border_red);
+            }
+
+            rankContainer.addView(rankItemView);
         }
 
-        return byteArray;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("랭킹 리스트")
+                .setView(dialogView)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

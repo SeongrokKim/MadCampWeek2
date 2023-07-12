@@ -1,6 +1,5 @@
 package com.example.madcampweek2;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -8,21 +7,29 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.health.SystemHealthManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
-import org.w3c.dom.Text;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fragment1_detail extends Fragment {
 
@@ -35,11 +42,15 @@ public class Fragment1_detail extends Fragment {
 //            mParam2 = getArguments().getString(ARG_PARAM2);
 //        }
 //    }
+    RecyclerView commentRecyclerView;
     TextView titleView;
     TextView nameView;
     TextView datetimeView;
-    TextView textView;
+    TextView textView, write_btn;
     ImageView menuView;
+    List<String> uidList, datetimeList, contentList, nameList;
+    EditText writeView;
+    MyAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,14 +66,24 @@ public class Fragment1_detail extends Fragment {
         String name = bundle.getString("name");
         String datetime = bundle.getString("datetime");
         String text = bundle.getString("text");
+
         titleView = view.findViewById(R.id.titleView);
         titleView.setText(title);
-        System.out.println(title);
         nameView = view.findViewById(R.id.nameView);
         nameView.setText(name);
         datetimeView = view.findViewById(R.id.datetimeView);
         datetimeView.setText(datetime);
         textView = view.findViewById(R.id.textView);
+        commentRecyclerView = view.findViewById(R.id.commentRecyclerView);
+        commentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        writeView = view.findViewById(R.id.writeView);
+        write_btn = view.findViewById(R.id.write_btn);
+
+        uidList = new ArrayList<>();
+        nameList = new ArrayList<>();
+        datetimeList = new ArrayList<>();
+        contentList = new ArrayList<>();
+
         if(text == "null"){
             text = "";
         }
@@ -74,13 +95,29 @@ public class Fragment1_detail extends Fragment {
         }
         menuView = view.findViewById(R.id.menuView);
 
-        System.out.println("mine:"+my_uid);
-        System.out.println("writer:"+uid);
 
         if(!my_uid.equals(uid)){
             menuView.setVisibility(View.INVISIBLE);
         }
         String finalText = text;
+
+        write_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String content = writeView.getText().toString();
+                uidList.add(no);
+                nameList.add(name);
+                datetimeList.add(datetime);
+                contentList.add(content);
+                WriteCommentRequest writeCommentRequest = new WriteCommentRequest(no, my_uid, content, null);
+                RequestQueue queue = Volley.newRequestQueue( requireContext() );
+                queue.add(writeCommentRequest);
+                writeView.setText("");
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
         menuView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -146,7 +183,106 @@ public class Fragment1_detail extends Fragment {
             }
         });
 
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+                    JSONObject jsonObject = new JSONObject( response );
+                    Boolean success = jsonObject.getBoolean("success");
+
+                    if(!success){
+                        Toast.makeText(requireContext(), "댓글 없음", Toast.LENGTH_SHORT);
+                        return;
+                    }
+                    JSONArray result = jsonObject.getJSONArray("result");
+                    for (int i = 0; i < result.length(); i++) {
+                        JSONObject dataObject = result.getJSONObject(i);
+                        String uid = dataObject.getString("writerUID");
+                        String name = dataObject.getString("name"); // "name"은 배열의 각 객체에서 정의한 키
+                        String datetime = dataObject.getString("datetime");
+                        String content = dataObject.getString("content");
+                        datetime = datetime.substring(0, datetime.length() - 5);
+
+                        // 데이터 추가
+                        uidList.add(uid);
+                        datetimeList.add(datetime.replaceAll("[^0-9:-]", " "));
+                        contentList.add(content);
+                        nameList.add(name);
+                    }
+                    adapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        CommentRequest commentRequest = new CommentRequest(no, responseListener);
+        RequestQueue queue = Volley.newRequestQueue( requireContext() );
+        queue.add(commentRequest);
+
+        adapter = new Fragment1_detail.MyAdapter(uidList, datetimeList, nameList, contentList);
+        commentRecyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    private class MyAdapter extends RecyclerView.Adapter<Fragment1_detail.MyAdapter.ViewHolder> {
+        private List<String> uid;
+        private List<String> datetime;
+        private List<String> name;
+        private List<String> content;
+
+        public MyAdapter(List<String> uid, List<String> datetime, List<String> name, List<String> content) {
+            this.uid = uid;
+            this.datetime = datetime;
+            this.name = name;
+            this.content = content;
+        }
+        public void setData(List<String> uid, List<String> datetime, List<String> name, List<String> content) {
+            this.uid = uid;
+            this.datetime = datetime;
+            this.name = name;
+            this.content = content;
+        }
+
+        @Override
+        public Fragment1_detail.MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_comment, parent, false);
+            return new Fragment1_detail.MyAdapter.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(Fragment1_detail.MyAdapter.ViewHolder holder, int position) {
+            String itemContent = content.get(position);
+            String itemName = name.get(position);
+            String itemDatetime = datetime.get(position);
+            holder.bind(itemContent, itemName, itemDatetime);
+        }
+
+        @Override
+        public int getItemCount() {
+            return name.size();
+        }
+
+
+        public class ViewHolder extends RecyclerView.ViewHolder{
+            private TextView contentTextView;
+            private TextView nameTextView;
+            private TextView datetimeTextView;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                contentTextView = itemView.findViewById(R.id.content);
+                nameTextView = itemView.findViewById(R.id.name);
+                datetimeTextView = itemView.findViewById(R.id.datetime);
+            }
+
+            public void bind(String itemContent, String itemName, String itemDatetime) {
+                contentTextView.setText(itemContent);
+                nameTextView.setText(itemName);
+                datetimeTextView.setText(itemDatetime);
+            }
+        }
     }
 }
