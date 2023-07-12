@@ -5,6 +5,7 @@
         <item name="android:textViewStyle">@style/customTextViewFontStyle</item>
         <item name="android:buttonStyle">@style/customButtonFontStyle</item>
         <item name="android:editTextStyle">@style/customEditTextFontStyle</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="Theme.MadCampWeek2" parent="Base.Theme.MadCampWeek2" />
