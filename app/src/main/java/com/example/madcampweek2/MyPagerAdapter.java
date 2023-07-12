@@ -15,9 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
     private String uid;
-    public MyPagerAdapter(@NonNull FragmentManager fm, String uid) {
+    private String name;
+    private String uri;
+    private String intro;
+    public MyPagerAdapter(@NonNull FragmentManager fm, String uid, String name, String uri, String intro) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.uid = uid;
+        this.name = name;
+        this.uri = uri;
+        this.intro = intro;
     }
 
     @NonNull
@@ -31,7 +37,8 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
                 Fragment2 fragment2 = new Fragment2(uid);
                 return fragment2;
             case 2:
-                return new Fragment3();
+                Fragment3 fragment3 = new Fragment3(uid, name, uri, intro);
+                return fragment3;
             default:
                 throw new IllegalArgumentException("Invalid position: " + position);
         }
