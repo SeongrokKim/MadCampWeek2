@@ -29,7 +29,6 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
-
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
@@ -39,50 +38,32 @@
                     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
                     <ImageView
-                        android:id="@+id/btn_open_panel"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/icon_menu" />
+                    android:id="@+id/btn_open_panel"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_menu" />
 
                     <TextView
                         android:layout_width="20dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/titleText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/red"
-                        android:elevation="1dp"
-                        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-
-                        <ImageView
-                            android:id="@+id/btn_open_panel"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/icon_menu" />
-
-                        <TextView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/titleText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
+                        android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
 
 
-                        <ImageView
-                            android:id="@+id/rankView"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="200dp"
-                            app:srcCompat="@drawable/crown_2" />
+                    <ImageView
+                        android:id="@+id/rankView"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="200dp"
+                        app:srcCompat="@drawable/crown_2" />
 
-                    </androidx.appcompat.widget.Toolbar>
-                </FrameLayout>
+                </androidx.appcompat.widget.Toolbar>
+
 
             </com.google.android.material.appbar.AppBarLayout>
 
