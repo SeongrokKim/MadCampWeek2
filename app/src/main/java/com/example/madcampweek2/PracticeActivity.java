@@ -144,7 +144,6 @@ public class PracticeActivity extends AppCompatActivity {
         finishButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "연습 기록하기", Toast.LENGTH_SHORT).show();
                 // 다이얼로그를 생성하기 위한 빌더 객체 생성
                 AlertDialog.Builder builder = new AlertDialog.Builder(PracticeActivity.this);
                 // 다이얼로그 메시지 설정

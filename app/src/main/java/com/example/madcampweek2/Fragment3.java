@@ -263,7 +263,12 @@ public class Fragment3 extends Fragment {
                 builder.setView(dialogView);
                 AlertDialog dialog = builder.create();
 
-                oneLineIntro.setText(intro);
+                if (intro == null || intro.equals("null")){
+                    oneLineIntro.setText("");
+                }else{
+                    oneLineIntro.setText(intro);
+                }
+
 
                 // 취소 버튼 클릭 이벤트 처리
                 cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -278,12 +283,15 @@ public class Fragment3 extends Fragment {
                     @Override
                     public void onClick(View view) {
                         // 비밀번호 변경 작업 수행
-                        String intro = oneLineIntro.getText().toString();
-                        if (intro.equals("")){
-                            intro = "한 줄 소개가 없습니다.";
+                        String newintro = oneLineIntro.getText().toString();
+                        if (newintro.equals("") || newintro == null){
+                            introView.setText("한 줄 소개가 없습니다.");
+                        }
+                        else{
+                            intro = newintro;
+                            introView.setText(intro);
                         }
 
-                        String finalIntro = intro;
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -293,7 +301,6 @@ public class Fragment3 extends Fragment {
                                     System.out.println(success);
 
                                     if (success) {//로그인 성공시
-                                        introView.setText(finalIntro);
                                         dialog.dismiss();
 
 

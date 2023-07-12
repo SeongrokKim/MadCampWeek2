@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         String name = intent.getStringExtra("name");
         String photoUri = intent.getStringExtra("photo");
         String intro = intent.getStringExtra("intro");
-        Log.d("photoUri", photoUri);
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());

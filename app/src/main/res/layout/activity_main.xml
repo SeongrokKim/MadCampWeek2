@@ -38,7 +38,7 @@
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?colorPrimaryDark"
+                        android:background="@color/red"
                         android:elevation="1dp"
                         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
@@ -50,7 +50,8 @@
 
                         <TextView
                             android:layout_width="20dp"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/titleText"
@@ -153,11 +154,9 @@
             android:id="@+id/book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/met"
             android:layout_marginTop="40dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/tun">
+            app:layout_constraintTop_toBottomOf="@id/met">
 
             <ImageView
                 android:layout_width="55dp"
