@@ -21,7 +21,7 @@
 ## 프로젝트 설명
 ### 초기 화면
 - **앱 실행**
- [앱 실행 사진]
+https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-8233-85ebc966c179
 
 - **핵심 기능**
   - 회원가입을 할 수 있습니다.
