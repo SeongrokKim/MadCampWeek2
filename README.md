@@ -21,7 +21,8 @@
 ## 프로젝트 설명
 ### 초기 화면
 - **앱 실행**
-https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-8233-85ebc966c179
+![회원가입로그인](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-8233-85ebc966c179)
+![소셜로그인](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/f25d4990-fed6-4444-a92e-ceec812fcdcd)
 
 - **핵심 기능**
   - 회원가입을 할 수 있습니다.
@@ -36,23 +37,23 @@ https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-
 
 ### 메인 화면
 - **앱 실행**
- [앱 실행 사진]
+![메인](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/4015da01-f564-4a4e-9938-fa177713ff7e)
 
 - **핵심 기능**
-  - 바텀 네비게이션 혹은 양 옆 스와이프를 통해 탭을 이동할 수 있습니다.
+  - 바텀 네비게이션을 통해 탭을 이동할 수 있습니다.
   - 왼쪽 끝에서 오른쪽으로 스와이프하거나 왼쪽 상단의 메뉴 버튼을 통해 패널을 열 수 있습니다.
   - 패널에서 메트로놈 기능과 연습 기록 기능을 선택할 수 있고, 로그아웃이 가능합니다.
   - 오른쪽 상단 왕관 버튼을 통해 연습 시간으로 정렬된 순서를 확인할 수 있습니다.
 
 - **기술 설명**
-  - Main Activity에서 세 fragment를 연결하고, bottom navigation view와 view pager를 구현하여 이동이 가능합니다.
+  - Main Activity에서 세 fragment를 연결하고, bottom navigation view로 구현하여 이동이 가능합니다.
   - DrawerLayout을 사용하여 패널을 구현했습니다.
   - 로그아웃을 시도하면 로그인한 방식에 따라 다르게 로그아웃을 시도하여 초기 화면으로 이동합니다.
   - db에서 연습 총 시간을 내림차순으로 정렬하여 상위 5명의 명단이 다이얼로그를 통해 표시됩니다.
 
 ### 메트로놈, 연습 기록 화면
 - **앱 실행**
- [앱 실행 사진]
+![패널](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/ff2325eb-a6ca-4485-94b6-8b50948f44cf)
 
 - **핵심 기능**
   - 메트로놈 기능을 통해 박자를 맞춰 연습할 수 있습니다.
@@ -70,7 +71,7 @@ https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-
 
 ### 게시판 탭
 - **앱 실행**
- [앱 실행 사진]
+![게시판](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/fbf8a78d-2cfd-4078-8b5e-4e2ec2800aee)
 
 - **핵심 기능**
   - 게시글을 작성할 수 있습니다.
@@ -85,7 +86,7 @@ https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-
 
 ### 홈 탭
 - **앱 실행**
-[앱 실행 화면]
+![홈](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/17a3d0f9-bc43-4a96-a6a7-6ed6219db47a)
 
 - **핵심 기능**
   - 달력을 통해 날짜를 확인할 수 있습니다.
@@ -104,7 +105,7 @@ https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-
 
 ### 설정 탭
 - **앱 실행**
-[앱 실행 화면]
+![설정](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/15a1d1db-1cf5-4475-9517-5a96f4b55812)
 
 
 - **핵심 기능**
