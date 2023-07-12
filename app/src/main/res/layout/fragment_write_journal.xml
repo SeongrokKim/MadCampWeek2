@@ -36,6 +36,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="저  장  하  기"
+        android:backgroundTint="@color/navy"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

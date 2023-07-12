@@ -46,6 +46,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="게 시"
+        android:backgroundTint="@color/navy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
