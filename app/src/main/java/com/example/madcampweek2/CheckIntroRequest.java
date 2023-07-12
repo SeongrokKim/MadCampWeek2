@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class CheckIntroRequest extends StringRequest {
     //서버 url 설정
-    final static private String URL=urlLink.url+"/check_intro";
+    final static private String URL=urlLink.url+"/user_info";
     private Map<String, String> map;
 
     public CheckIntroRequest(String uid,  Response.Listener<String> listener){

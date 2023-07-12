@@ -1,21 +1,37 @@
 package com.example.madcampweek2;
 
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,14 +39,45 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.madcampweek2.databinding.FragmentFragment3Binding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 
 
 public class Fragment3 extends Fragment {
@@ -38,8 +85,11 @@ public class Fragment3 extends Fragment {
     private FragmentFragment3Binding binding;
     private ImageView profile;
     private TextView name;
-    private String uid, userName, userPhotoUri, intro;
-    private TextView changePw, changeIntro, myPost, myComment, introView;
+    private String uid, userName, userPhotoUri, intro, filePath;
+    private TextView changePw, changeIntro, myPost, myComment, introView, changeProfile;
+    private Bitmap bitmap;
+    private ImageView pannelImage;
+    private Uri selectUri;
 
     public Fragment3(String uid, String name, String photoUri ,String intro) {
         this.uid = uid;
@@ -49,20 +99,23 @@ public class Fragment3 extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFragment3Binding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        pannelImage = mainActivity.profile;
 
         profile = root.findViewById(R.id.profileView);
         name = root.findViewById(R.id.nameView);
         changePw = root.findViewById(R.id.change_pw);
         changeIntro = root.findViewById(R.id.change_introduce);
-        myPost = root.findViewById(R.id.my_post);
-        myComment = root.findViewById(R.id.my_comment);
         introView = root.findViewById(R.id.introView);
-        Log.d("UID",uid);
+        changeProfile = root.findViewById(R.id.change_profile);
+
+        Glide.with(profile).load(userPhotoUri).into(profile);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -75,7 +128,7 @@ public class Fragment3 extends Fragment {
                     if (success) {//로그인 성공시
                         intro = jsonObject.optString("intro");
 
-                        if (intro.equals("")){
+                        if (intro.equals("") || intro.equals("null")){
                             introView.setText("한 줄 소개가 없습니다.");
                         }
                         else{
@@ -96,13 +149,6 @@ public class Fragment3 extends Fragment {
         queue.add(checkIntroRequest);
 
 
-        if (userPhotoUri == null) {
-            Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
-        } else if (userPhotoUri.equals("null")) {
-            Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
-        } else {
-            Glide.with(profile).load(userPhotoUri).circleCrop().into(profile);
-        }
         if (userName != null) {
             name.setText(userName);
         }
@@ -264,8 +310,51 @@ public class Fragment3 extends Fragment {
             }
         });
 
+        changeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+            }
+        });
+
+
+        if (userPhotoUri != null && !userPhotoUri.equals("null")){
+            Glide.with(getContext())
+                    .load(Uri.parse(userPhotoUri))
+                    .circleCrop()
+                    .into(profile);
+
+            Glide.with(getContext())
+                    .load(Uri.parse(userPhotoUri))
+                    .circleCrop()
+                    .into(pannelImage);
+        }else{
+            Glide.with(getContext()).load(R.drawable.init_profile).circleCrop().into(profile);
+            Glide.with(getContext()).load(R.drawable.init_profile).circleCrop().into(pannelImage);
+        }
+
 
         return root;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST){
+            if (resultCode == RESULT_OK){
+                selectUri = data.getData();
+                Glide.with(getContext()).load(selectUri).circleCrop().into(profile);
+                Glide.with(getContext()).load(selectUri).circleCrop().into(pannelImage);
+
+            } else if (resultCode == RESULT_CANCELED){
+
+            }
+        }
+    }
+
 }
+

@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 
@@ -45,6 +46,7 @@ import org.json.JSONObject;
 
 
 import java.security.MessageDigest;
+import android.Manifest;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -93,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("email", email);
                             intent.putExtra("UID", uid[0]);
                             intent.putExtra("intro", intro[0]);
+
                             if(uid[0] != null){
                                 // MainActivity로 이동합니다.
                                 startActivity(intent);
@@ -125,6 +128,20 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(this, "외부 저장소 사용을 위해 읽기/쓰기 필요", Toast.LENGTH_SHORT).show();
+                }
+
+                requestPermissions(new String[]
+                        {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+            }
+        }
+
+
 
         login_id = findViewById( R.id.login_id);
         login_password = findViewById( R.id.login_password );
@@ -198,6 +215,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra( "name", name );
                                 intent.putExtra("UID", UID);
                                 intent.putExtra("intro", intro[0]);
+                                intent.putExtra("photo", jsonObject.getString("photo"));
 
                                 startActivity( intent );
 
@@ -273,8 +291,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                System.out.println(uid[0]);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
-                                intent.putExtra("photoUri", String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())));
-//                                intent.putExtra("kakaoID", kakaoID);
+                                intent.putExtra("photo", String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())));
                                 intent.putExtra("UID", uid[0]);
                                 intent.putExtra("intro", intro);
 

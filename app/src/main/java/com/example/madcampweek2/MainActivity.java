@@ -1,8 +1,12 @@
 package com.example.madcampweek2;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +38,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kakao.sdk.user.UserApiClient;
 import com.bumptech.glide.Glide;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import kotlin.Unit;
@@ -42,7 +47,7 @@ import kotlin.jvm.functions.Function1;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
-    private ImageView profile;
+    public ImageView profile;
     private TextView nickname;
     private DrawerLayout drawerLayout;
     private ImageView btnOpenPanel;
@@ -65,13 +70,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String UID = intent.getStringExtra("UID");
         String name = intent.getStringExtra("name");
-        String photoUri;
+        String photoUri = intent.getStringExtra("photo");
         String intro = intent.getStringExtra("intro");
-        if (intent.getStringExtra("photoUri") == null){
-            photoUri = "null";
-        }else{
-            photoUri = intent.getStringExtra("photoUri");
-        }
+        Log.d("photoUri", photoUri);
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -170,12 +172,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        Toast.makeText(getApplicationContext(), photoUri,Toast.LENGTH_SHORT).show();
-        if (photoUri == null){
-            Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
-        } else if (photoUri.equals("null")){
-            Glide.with(profile).load(R.drawable.init_profile).circleCrop().into(profile);
-        } else {
-            Glide.with(profile).load(photoUri).circleCrop().into(profile);
+        if (photoUri != null && !photoUri.equals("null")){
+            Glide.with(this)
+                    .load(Uri.parse(photoUri))
+                    .circleCrop()
+                    .into(profile);
+
+        }else{
+            Glide.with(this).load(R.drawable.init_profile).circleCrop().into(profile);
         }
         if (name != null){
             nickname.setText(name);
@@ -228,6 +232,18 @@ public class MainActivity extends AppCompatActivity {
             titleText.setText("설정");
         }
     };
+
+    public byte[] binaryStringToByteArray(String binaryString) {
+        int len = binaryString.length() / 8;
+        byte[] byteArray = new byte[len];
+
+        for (int i = 0; i < len; i++) {
+            String byteString = binaryString.substring(i * 8, (i + 1) * 8);
+            byteArray[i] = (byte) Integer.parseInt(byteString, 2);
+        }
+
+        return byteArray;
+    }
 
 }
 
