@@ -21,8 +21,8 @@
 ## 프로젝트 설명
 ### 초기 화면
 - **앱 실행**
-![회원가입로그인](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-8233-85ebc966c179)
-![소셜로그인](https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/f25d4990-fed6-4444-a92e-ceec812fcdcd)
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/b5a4b63b-6763-45ad-8233-85ebc966c179" width="250" height="500"/>
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/f25d4990-fed6-4444-a92e-ceec812fcdcd" width="250" height="500"/>
 
 - **핵심 기능**
   - 회원가입을 할 수 있습니다.
