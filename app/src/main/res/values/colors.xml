@@ -6,4 +6,8 @@
     <color name="fall">#44d8d27e</color>
     <color name="winter">#44a1c1da</color>
     <color name="spring">#448da64b</color>
+    <color name="beige">#F9F5EB</color>
+    <color name="grey">#E4DCCF</color>
+    <color name="red">#E45455</color>
+    <color name="navy">#002B5B</color>
 </resources>

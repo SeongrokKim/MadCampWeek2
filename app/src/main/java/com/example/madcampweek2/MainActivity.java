@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
@@ -112,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
 
         pager = findViewById(R.id.pager);
         MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), UID, name, photoUri, intro);
-        pager.setAdapter(pagerAdapter);
-        pager.setOffscreenPageLimit(3);
-        pager.setCurrentItem(1);
+//        pager.setAdapter(pagerAdapter);
+//        pager.setOffscreenPageLimit(0);
+//        pager.setCurrentItem(1);
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -123,13 +124,25 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.tab1){
                     titleText.setText("게시판");
-                    pager.setCurrentItem(0);
+//                    pager.setCurrentItem(0);
+                    Fragment1 fragment1 = new Fragment1(UID);
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, fragment1);
+                    fragmentTransaction.commit();
                 } else if (item.getItemId() == R.id.tab2) {
                     titleText.setText("홈");
-                    pager.setCurrentItem(1);
+                    Fragment2 fragment2 = new Fragment2(UID);
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, fragment2);
+                    fragmentTransaction.commit();
+//                    pager.setCurrentItem(1);
                 } else if (item.getItemId() == R.id.tab3) {
                     titleText.setText("설정");
-                    pager.setCurrentItem(2);
+//                    pager.setCurrentItem(2);
+                    Fragment3 fragment3 = new Fragment3(UID, name, photoUri, intro);
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, fragment3);
+                    fragmentTransaction.commit();
                 }
                 return true;
             }

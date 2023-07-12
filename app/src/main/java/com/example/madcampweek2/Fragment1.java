@@ -1,5 +1,7 @@
 package com.example.madcampweek2;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import androidx.appcompat.widget.SearchView;
 
-public class Fragment1 extends Fragment implements SearchView.OnQueryTextListener {
+public class Fragment1 extends Fragment implements SearchView.OnQueryTextListener{
 
 //    private Fragment1ViewModel mViewModel;
 
@@ -34,12 +36,13 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
     public Fragment1(String uid) {
         // Required empty public constructor
         this.UID=uid;
+
     }
 
-    private RecyclerView recyclerView;
-    private androidx.appcompat.widget.SearchView searchView;
-    private ImageView add_btn;
-    private MyAdapter adapter;
+    public RecyclerView recyclerView;
+    public androidx.appcompat.widget.SearchView searchView;
+    public ImageView add_btn;
+    public MyAdapter adapter;
     private List<String> noList;
     private List<String> uidList;
     private List<String> titleList;
@@ -56,6 +59,7 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_fragment1, container, false);
+
 
         // RecyclerView 초기화
         recyclerView = rootView.findViewById(R.id.recyclerView);
@@ -82,7 +86,7 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
                 fragment1_add.setArguments(bundle1);
 
                 FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, fragment1_add);
+                fragmentTransaction.replace(R.id.container, fragment1_add, "fragment1");
                 fragmentTransaction.addToBackStack(null);
 //                recyclerView.setVisibility(View.INVISIBLE);
 //                add_btn.setVisibility(View.INVISIBLE);
@@ -143,6 +147,7 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
         return rootView;
     }
 
+
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -187,6 +192,7 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
         return filteredList;
     }
 
+
     // RecyclerView 어댑터 클래스
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private List<String> uid;
@@ -212,6 +218,7 @@ public class Fragment1 extends Fragment implements SearchView.OnQueryTextListene
             this.text = text;
             this.no = no;
         }
+
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

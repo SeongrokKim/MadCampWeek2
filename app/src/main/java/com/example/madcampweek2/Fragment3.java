@@ -92,12 +92,13 @@ public class Fragment3 extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
     private FragmentFragment3Binding binding;
     private ImageView profile;
-    private TextView name;
+    private TextView name, timeView, rankView;
     private String uid, userName, userPhotoUri, intro, filePath;
     private TextView changePw, changeIntro, myPost, myComment, introView, changeProfile;
     private Bitmap bitmap;
     private ImageView pannelImage;
     private Uri selectUri;
+    private List<String> uidList, totList, rankList;
 
     public Fragment3(String uid, String name, String photoUri ,String intro) {
         this.uid = uid;
@@ -124,7 +125,39 @@ public class Fragment3 extends Fragment {
         introView = root.findViewById(R.id.introView);
         changeProfile = root.findViewById(R.id.change_profile);
 
+        timeView = root.findViewById(R.id.timeView);
+        rankView = root.findViewById(R.id.rankView);
+
         Glide.with(profile).load(userPhotoUri).into(profile);
+        Response.Listener<String> responseListener1 = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject( response );
+                    JSONArray result = jsonObject.getJSONArray("result");
+
+                    for (int i = 0; i < result.length(); i++) {
+                        JSONObject dataObject = result.getJSONObject(i);
+                        String uid1 = dataObject.getString("uid");
+                        String total_time = dataObject.getString("total_time");
+                        String rank = dataObject.getString("rank");
+
+                        if(uid1.equals(uid)){
+                            if(!total_time.equals("")){
+                                timeView.setText(total_time);
+                            }
+                            rankView.setText(rank+"위");
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        RankRequest rankRequest = new RankRequest(responseListener1);
+        RequestQueue queue1 = Volley.newRequestQueue( requireContext() );
+        queue1.add(rankRequest);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -345,6 +378,8 @@ public class Fragment3 extends Fragment {
             Glide.with(getContext()).load(R.drawable.init_profile).circleCrop().into(profile);
             Glide.with(getContext()).load(R.drawable.init_profile).circleCrop().into(pannelImage);
         }
+
+
 
       
         return root;
