@@ -53,7 +53,7 @@
 
 ### 메트로놈, 연습 기록 화면
 - **앱 실행**
-<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/ff2325eb-a6ca-4485-94b6-8b50948f44cf" width="250" height="500"/>
+<img src="https://github.com/SeongrokKim/MadCampWeek2/assets/138121077/6da086ec-6842-491b-884c-22111d8fc098" width="250" height="500"/>
 
 - **핵심 기능**
   - 메트로놈 기능을 통해 박자를 맞춰 연습할 수 있습니다.
