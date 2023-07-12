@@ -44,6 +44,9 @@ public class Fragment2 extends Fragment{
         this.uid=uid;
     }
 
+    public Fragment2() {
+        // Required empty public constructor
+    }
 
     public String getUID(){
         return this.uid;
