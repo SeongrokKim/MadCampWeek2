@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class Fragment1_add extends Fragment {
 
     private AlertDialog dialog;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class Fragment1_add extends Fragment {
         titleView = view.findViewById(R.id.editTitle);
         contentView = view.findViewById(R.id.editText);
         post_btn = view.findViewById(R.id.post_btn);
+
 
         Bundle bundle = getArguments();
         String uid = bundle.getString("uid");
@@ -64,6 +67,10 @@ public class Fragment1_add extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean success = jsonObject.getBoolean("success");
                             if(success){
+//                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Fragment1 fragment1 = (Fragment1) fragmentManager.findFragmentByTag("fragment1");
+//                                fragmentTransaction.remove(fragment1);
                                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                                 if (fragmentManager.getBackStackEntryCount() > 0) {
                                     fragmentManager.popBackStack();
