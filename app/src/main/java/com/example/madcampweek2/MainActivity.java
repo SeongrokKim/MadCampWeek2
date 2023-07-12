@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
 //        pager.setAdapter(pagerAdapter);
 //        pager.setOffscreenPageLimit(0);
 //        pager.setCurrentItem(1);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, fragment2);
+        fragmentTransaction.commit();
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -318,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
             String rank = ranks.get(i);
             String name = names.get(i);
             String total = totals.get(i);
+            System.out.println("count"+i);
 
             View rankItemView = inflater.inflate(R.layout.dialog_rank_list, rankContainer, false);
 
@@ -338,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("랭킹 리스트")
+        builder.setTitle("연습 시간 랭킹")
                 .setView(dialogView)
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override

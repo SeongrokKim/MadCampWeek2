@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@color/beige"
+    android:background="#FFFDF6"
     tools:context=".LoginActivity">
 
     <Button
@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:backgroundTint="@color/navy"
         android:text="로그인"
         app:layout_constraintBaseline_toBaselineOf="@+id/join_button"
         app:layout_constraintStart_toStartOf="@+id/login_password" />
@@ -47,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:backgroundTint="@color/navy"
         android:text="회원가입"
         android:layout_marginBottom="300dp"
         app:layout_constraintBottom_toBottomOf="parent"

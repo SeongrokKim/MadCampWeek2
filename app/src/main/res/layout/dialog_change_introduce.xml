@@ -33,6 +33,7 @@
 
         <Button
             android:id="@+id/cancel_button"
+            android:backgroundTint="#CCCCCC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="취소" />
@@ -45,6 +46,7 @@
 
         <Button
             android:id="@+id/done_button"
+            android:backgroundTint="@color/navy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="완료" />

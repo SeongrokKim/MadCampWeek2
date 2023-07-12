@@ -27,8 +27,8 @@ public class PracticeActivity extends AppCompatActivity {
     private TextView timerTextView;
     private EditText countView, categoryView, titleView;
     WriteJournalFragment writeJournalFragment;
-    private Button startButton, stopButton, resetButton, plusButton, minusButton, finishButton;
-    private ImageView writeButton;
+    private Button startButton, stopButton, resetButton,  finishButton;
+    private ImageView plusButton, minusButton, writeButton;
     private boolean isRunning;
     private int seconds;
     private Handler handler;

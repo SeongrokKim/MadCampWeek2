@@ -14,6 +14,7 @@
         android:ems="7"
         android:gravity="center"
         android:hint="악기/노래"
+        android:fontFamily="@font/nanumgothic"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,6 +31,7 @@
         android:gravity="center"
         android:textStyle="normal"
         android:hint="곡 제목"
+        android:fontFamily="@font/nanumgothic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -43,43 +45,16 @@
         android:layout_height="wrap_content"
         android:ems="2"
         android:gravity="center"
-        android:textStyle="bold"
         android:inputType="numberDecimal"
         android:text="0"
         android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintVertical_bias="0.158" />
-
-    <Button
-        android:id="@+id/plus_btn"
-        android:layout_width="60dp"
-        android:layout_height="48dp"
-        android:text="+"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.132"
-        app:layout_constraintStart_toEndOf="@+id/count"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textStyle="bold"
-        app:layout_constraintVertical_bias="0.373" />
-
-    <Button
-        android:id="@+id/minus_btn"
-        android:layout_width="60dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/count"
-        app:layout_constraintHorizontal_bias="0.828"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textStyle="bold"
-        app:layout_constraintVertical_bias="0.373" />
 
     <TextView
         android:id="@+id/timerTextView"
@@ -101,6 +76,7 @@
         android:layout_height="wrap_content"
         android:text="Start"
         android:textStyle="bold"
+        android:backgroundTint="#CCCCCC"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/stopButton"
         app:layout_constraintHorizontal_bias="0.907"
@@ -115,6 +91,7 @@
         android:layout_marginTop="23dp"
         android:text="Stop"
         android:textStyle="bold"
+        android:backgroundTint="#CCCCCC"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
@@ -128,6 +105,7 @@
         android:layout_height="wrap_content"
         android:text="Reset"
         android:textStyle="bold"
+        android:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.103"
@@ -154,6 +132,7 @@
         android:textStyle="bold"
         android:ems="15"
         android:text="기   록   하   기"
+        android:backgroundTint="@color/navy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -161,14 +140,38 @@
         app:layout_constraintTop_toBottomOf="@+id/stopButton"
         app:layout_constraintVertical_bias="0.316" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ImageView
+        android:id="@+id/plus_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/count"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35"
+        app:srcCompat="@drawable/add_grey_circle" />
+
+    <ImageView
+        android:id="@+id/minus_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/count"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35"
+        app:srcCompat="@drawable/minus_grey_circle" />
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"/>-->
 
 
 
