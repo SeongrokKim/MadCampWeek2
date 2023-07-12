@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 
@@ -45,6 +46,7 @@ import org.json.JSONObject;
 
 
 import java.security.MessageDigest;
+import android.Manifest;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -76,12 +78,14 @@ public class LoginActivity extends AppCompatActivity {
                 Uri photoUri = account.getPhotoUrl();
                 String email = account.getEmail();
                 final String[] uid = {null};
+                final String[] intro = {null};
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject = new JSONObject( response );
                             uid[0] = jsonObject.getString( "uid" );
+                            intro[0] = jsonObject.optString("intro");
 
                             // MainActivity로 이동하기 위한 Intent를 생성합니다.
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -90,6 +94,8 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("photoUri", String.valueOf(photoUri));
                             intent.putExtra("email", email);
                             intent.putExtra("UID", uid[0]);
+                            intent.putExtra("intro", intro[0]);
+
                             if(uid[0] != null){
                                 // MainActivity로 이동합니다.
                                 startActivity(intent);
@@ -123,6 +129,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(this, "외부 저장소 사용을 위해 읽기/쓰기 필요", Toast.LENGTH_SHORT).show();
+                }
+
+                requestPermissions(new String[]
+                        {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+            }
+        }
+
+
+
         login_id = findViewById( R.id.login_id);
         login_password = findViewById( R.id.login_password );
         loginButton = findViewById(R.id.login_button);
@@ -131,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         joinButton = findViewById(R.id.join_button);
         loginKakao = findViewById(R.id.login_kakao);
         loginGoogle = findViewById(R.id.login_google);
+        final String[] intro = {null};
 
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
             @Override
@@ -179,7 +200,9 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject( response );
                             boolean success = jsonObject.getBoolean( "success" );
+                            intro[0] = jsonObject.getString("intro");
                             System.out.println(success);
+
 
                             if(success) {//로그인 성공시
 
@@ -191,6 +214,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                 intent.putExtra( "name", name );
                                 intent.putExtra("UID", UID);
+                                intent.putExtra("intro", intro[0]);
+                                intent.putExtra("photo", jsonObject.getString("photo"));
 
                                 startActivity( intent );
 
@@ -255,18 +280,20 @@ public class LoginActivity extends AppCompatActivity {
                 // 로그인이 되어있으면
                 if (user!=null){
                     final String[] uid = {null};
+                    final String[] intro = {null};
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
                                 JSONObject jsonObject = new JSONObject( response );
                                 uid[0] = jsonObject.getString( "uid" );
+                                intro[0] = jsonObject.getString("intro");
 //                                System.out.println(uid[0]);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
-                                intent.putExtra("photoUri", String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())));
-//                                intent.putExtra("kakaoID", kakaoID);
+                                intent.putExtra("photo", String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())));
                                 intent.putExtra("UID", uid[0]);
+                                intent.putExtra("intro", intro);
 
                                 if(uid[0]!=null) startActivity(intent);
                                 else System.out.println("ERROR: null UID");
