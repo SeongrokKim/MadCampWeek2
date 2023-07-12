@@ -315,6 +315,9 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout rankContainer = dialogView.findViewById(R.id.rank_container);
 
         for (int i = 0; i < ranks.size(); i++) {
+            if (i == 5){
+                break;
+            }
             String rank = ranks.get(i);
             String name = names.get(i);
             String total = totals.get(i);
