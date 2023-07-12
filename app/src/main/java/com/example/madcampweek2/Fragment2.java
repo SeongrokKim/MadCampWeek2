@@ -215,6 +215,8 @@ public class Fragment2 extends Fragment{
                 queue.add(monthlyRequest);
 
                 setMonthView();
+
+                setLogView(new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
             }
         });
 
@@ -292,6 +294,8 @@ public class Fragment2 extends Fragment{
                 queue.add(monthlyRequest);
 
                 setMonthView();
+                setLogView(new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+
             }
         });
 

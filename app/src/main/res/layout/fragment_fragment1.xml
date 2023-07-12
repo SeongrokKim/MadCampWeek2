@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="580dp"
     android:windowSoftInputMode="adjustNothing"
+    android:background="@color/beige"
     tools:context=".Fragment1">
 
 
