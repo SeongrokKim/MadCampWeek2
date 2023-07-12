@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/beige"
     tools:context=".PracticeActivity">
 
     <EditText
@@ -13,6 +14,7 @@
         android:ems="7"
         android:gravity="center"
         android:hint="악기/노래"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -26,6 +28,7 @@
         android:layout_height="wrap_content"
         android:ems="13"
         android:gravity="center"
+        android:textStyle="normal"
         android:hint="곡 제목"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +43,7 @@
         android:layout_height="wrap_content"
         android:ems="2"
         android:gravity="center"
+        android:textStyle="bold"
         android:inputType="numberDecimal"
         android:text="0"
         android:textSize="40sp"
@@ -55,12 +59,12 @@
         android:layout_width="60dp"
         android:layout_height="48dp"
         android:text="+"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.132"
         app:layout_constraintStart_toEndOf="@+id/count"
         app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
         app:layout_constraintVertical_bias="0.373" />
 
     <Button
@@ -69,12 +73,12 @@
         android:layout_height="48dp"
         android:layout_marginStart="4dp"
         android:text="-"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/count"
         app:layout_constraintHorizontal_bias="0.828"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
         app:layout_constraintVertical_bias="0.373" />
 
     <TextView
@@ -88,6 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/count"
+        android:textStyle="bold"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -95,6 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/stopButton"
         app:layout_constraintHorizontal_bias="0.907"
@@ -108,6 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
         android:text="Stop"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
@@ -120,6 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reset"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.103"
@@ -143,6 +151,7 @@
         android:id="@+id/finish_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:ems="15"
         android:text="기   록   하   기"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -64,65 +64,6 @@ public class LoginActivity extends AppCompatActivity {
     public String refreshToken;
     private String kakaoID;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google 로그인에 성공한 경우
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                // 사용자 이름과 이미지를 가져옵니다.
-                String name = account.getDisplayName();
-                Uri photoUri = account.getPhotoUrl();
-                String email = account.getEmail();
-                final String[] uid = {null};
-                final String[] intro = {null};
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject( response );
-                            uid[0] = jsonObject.getString( "uid" );
-                            intro[0] = jsonObject.optString("intro");
-
-                            // MainActivity로 이동하기 위한 Intent를 생성합니다.
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            // 사용자 이름과 이미지를 Intent에 추가합니다.
-                            intent.putExtra("name", name);
-                            intent.putExtra("photoUri", String.valueOf(photoUri));
-                            intent.putExtra("email", email);
-                            intent.putExtra("UID", uid[0]);
-                            intent.putExtra("intro", intro[0]);
-
-                            if(uid[0] != null){
-                                // MainActivity로 이동합니다.
-                                startActivity(intent);
-                            }
-                            else System.out.println("error, null UID");
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                SocialRegisterRequest socialRegisterRequest = new SocialRegisterRequest( email, name, String.valueOf(photoUri), responseListener );
-                RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
-                queue.add( socialRegisterRequest );
-
-
-            } catch (ApiException e) {
-                // Google 로그인에 실패한 경우
-
-                Toast.makeText(getApplicationContext(),"구글 로그인 실패", Toast.LENGTH_SHORT).show();
-                // 실패 처리를 수행합니다.
-            }
-        }
-    }
-
-
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,40 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         loginGoogle = findViewById(R.id.login_google);
         final String[] intro = {null};
 
-        Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
-            @Override
-            public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
-                //oAuthToken != null 이라면 로그인 성공
-                if(oAuthToken!=null){
-                    // 토큰이 전달된다면 로그인이 성공한 것이고 토큰이 전달되지 않으면 로그인 실패한다.
-                    accessToken = oAuthToken.getAccessToken();
-                    refreshToken = oAuthToken.getRefreshToken();
 
-                    UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
-                        @Override
-                        public Unit invoke(User user, Throwable throwable) {
-                            if (user != null) {
-                                // 사용자 id 출력
-                                long userId = user.getId();
-                                kakaoID = String.valueOf(userId);
-                                Toast.makeText(getApplicationContext(),kakaoID,Toast.LENGTH_SHORT).show();
-                            }
-                            return null;
-                        }
-                    });
-                    updateKakaoLoginUi();
-
-                }else {
-                    //로그인 실패
-                    if (throwable != null) {
-                        String errorMessage = throwable.getMessage(); // 오류 메시지를 가져옵니다.
-                        System.out.println("오류 메시지: " + errorMessage);
-                    }
-                    Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
-                }
-                return null;
-            }
-        };
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +181,97 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google 로그인에 성공한 경우
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                // 사용자 이름과 이미지를 가져옵니다.
+                String name = account.getDisplayName();
+                Uri photoUri = account.getPhotoUrl();
+                String email = account.getEmail();
+                final String[] uid = {null};
+                final String[] intro = {null};
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject( response );
+                            uid[0] = jsonObject.getString( "uid" );
+                            intro[0] = jsonObject.optString("intro");
+
+                            // MainActivity로 이동하기 위한 Intent를 생성합니다.
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            // 사용자 이름과 이미지를 Intent에 추가합니다.
+                            intent.putExtra("name", name);
+                            intent.putExtra("photoUri", String.valueOf(photoUri));
+                            intent.putExtra("email", email);
+                            intent.putExtra("UID", uid[0]);
+                            intent.putExtra("intro", intro[0]);
+
+                            if(uid[0] != null){
+                                // MainActivity로 이동합니다.
+                                startActivity(intent);
+                            }
+                            else System.out.println("error, null UID");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                SocialRegisterRequest socialRegisterRequest = new SocialRegisterRequest( email, name, String.valueOf(photoUri), responseListener );
+                RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
+                queue.add( socialRegisterRequest );
+
+
+            } catch (ApiException e) {
+                // Google 로그인에 실패한 경우
+
+                Toast.makeText(getApplicationContext(),"구글 로그인 실패", Toast.LENGTH_SHORT).show();
+                // 실패 처리를 수행합니다.
+            }
+        }
+    }
+
+    Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
+        @Override
+        public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
+            //oAuthToken != null 이라면 로그인 성공
+            if(oAuthToken!=null){
+                // 토큰이 전달된다면 로그인이 성공한 것이고 토큰이 전달되지 않으면 로그인 실패한다.
+                accessToken = oAuthToken.getAccessToken();
+                refreshToken = oAuthToken.getRefreshToken();
+
+                UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
+                    @Override
+                    public Unit invoke(User user, Throwable throwable) {
+                        if (user != null) {
+                            // 사용자 id 출력
+                            long userId = user.getId();
+                            kakaoID = String.valueOf(userId);
+                        }
+                        return null;
+                    }
+                });
+                updateKakaoLoginUi();
+
+            }else {
+                //로그인 실패
+                if (throwable != null) {
+                    String errorMessage = throwable.getMessage(); // 오류 메시지를 가져옵니다.
+                    System.out.println("오류 메시지: " + errorMessage);
+                }
+                Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+    };
+
     private  void updateKakaoLoginUi(){
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
@@ -288,7 +287,6 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject( response );
                                 uid[0] = jsonObject.getString( "uid" );
                                 intro[0] = jsonObject.getString("intro");
-//                                System.out.println(uid[0]);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.putExtra("name", user.getKakaoAccount().getProfile().getNickname());
                                 intent.putExtra("photo", String.valueOf(Uri.parse(user.getKakaoAccount().getProfile().getProfileImageUrl())));

@@ -7,7 +7,7 @@
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    card_view:cardBackgroundColor="#f7f2f3"
+    card_view:cardBackgroundColor="@color/grey"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="1dp">
 
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="8dp"
+            android:textStyle="bold"
             android:layout_toRightOf="@id/item_image"
             android:text="카테고리"
             android:textSize="16sp" />
@@ -53,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:textStyle="bold"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="5dp"
             android:layout_toRightOf="@id/item_boundary"
@@ -74,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_category"
+            android:textStyle="bold"
             android:layout_marginStart="42dp"
             android:layout_toRightOf="@+id/item_image"
             android:text="-" />
@@ -94,6 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_category"
             android:layout_marginStart="127dp"
+            android:textStyle="bold"
             android:layout_toRightOf="@+id/item_image"
             android:text="-" />
 
