@@ -40,10 +40,8 @@ public class Fragment2 extends Fragment{
     private String uid;
 
     public Fragment2(String uid) {
-        this.uid=uid;
-
         // Required empty public constructor
-        this.uid = uid;
+        this.uid=uid;
     }
 
 
@@ -59,8 +57,8 @@ public class Fragment2 extends Fragment{
         binding = FragmentFragment2Binding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        System.out.println("UID:::"+uid);
-        System.out.println("getUID:::"+this.getUID());
+//        System.out.println("UID:::"+uid);
+//        System.out.println("getUID:::"+this.getUID());
         myText = root.findViewById(R.id.myText);
         btnPrev = root.findViewById(R.id.btn_prev);
         btnNext = root.findViewById(R.id.btn_next);
